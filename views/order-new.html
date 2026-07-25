@@ -1,0 +1,104 @@
+<%- include('header.html', { title: 'Nueva Orden', extraStyles: ['orders.css'] }) %>
+
+<div class="orders-page">
+    <div class="container">
+        <div class="orders-header">
+            <div>
+                <h1>Nueva Orden de Pruebas</h1>
+                <p class="text-muted">Selecciona el paciente y las pruebas a realizar</p>
+            </div>
+        </div>
+
+        <% if (typeof error !== 'undefined' && error) { %>
+            <div class="alert alert-danger">⚠️ <%= error %></div>
+        <% } %>
+
+        <form action="/orders/new" method="POST" class="order-form">
+            <!-- Patient Section -->
+            <div class="order-form-section">
+                <h3>👤 Datos del Paciente</h3>
+                <div class="grid grid-2">
+                    <div class="form-group">
+                        <label class="form-label">Paciente</label>
+                        <select name="patient_id" class="form-select" required>
+                            <option value="">Seleccionar paciente...</option>
+                            <% if (typeof patients !== 'undefined') { %>
+                                <% patients.forEach(function(p) { %>
+                                    <option value="<%= p.id %>"><%= p.full_name %> <%= p.national_id ? '— ' + p.national_id : '' %></option>
+                                <% }); %>
+                            <% } %>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">O crear nuevo paciente</label>
+                        <div class="flex gap-2">
+                            <input type="text" name="new_patient_name" class="form-input" placeholder="Nombre completo" style="flex:1;">
+                            <input type="text" name="new_patient_phone" class="form-input" placeholder="Teléfono" style="flex:1;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tests Section -->
+            <div class="order-form-section">
+                <h3>🧪 Pruebas a Realizar</h3>
+                <p class="text-sm text-muted mb-2">Selecciona una o más pruebas para esta orden</p>
+                
+                <% if (typeof tests !== 'undefined' && tests.length > 0) { %>
+                    <% var categories = {}; %>
+                    <% tests.forEach(function(test) { %>
+                        <% if (!categories[test.category_name]) categories[test.category_name] = []; %>
+                        <% categories[test.category_name].push(test); %>
+                    <% }); %>
+                    
+                    <% Object.keys(categories).forEach(function(cat) { %>
+                        <div style="margin-bottom: 1rem;">
+                            <h4 style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 0.5rem;"><%= cat %></h4>
+                            <% categories[cat].forEach(function(test) { %>
+                                <div class="test-select-item">
+                                    <input type="checkbox" name="test_ids" value="<%= test.id %>" id="test_<%= test.id %>">
+                                    <label for="test_<%= test.id %>">
+                                        <strong><%= test.name_es %></strong>
+                                        <% if (test.description) { %><span class="text-sm text-muted"> — <%= test.description %></span><% } %>
+                                    </label>
+                                    <span class="price">$<%= parseFloat(test.base_price).toFixed(2) %></span>
+                                </div>
+                            <% }); %>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <p class="text-muted">No hay pruebas disponibles. <a href="/admin/tests">Agregar pruebas</a></p>
+                <% } %>
+            </div>
+
+            <!-- Payment -->
+            <div class="order-form-section">
+                <h3>💳 Pago</h3>
+                <div class="flex items-center gap-3">
+                    <label class="form-check">
+                        <input type="checkbox" name="paid" value="true">
+                        <span>Orden pagada</span>
+                    </label>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <input type="text" name="payment_method" class="form-input" placeholder="Método de pago (efectivo, tarjeta, etc.)">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notes -->
+            <div class="order-form-section">
+                <h3>📝 Notas</h3>
+                <div class="form-group">
+                    <textarea name="notes" class="form-textarea" placeholder="Notas adicionales para esta orden..."></textarea>
+                </div>
+            </div>
+
+            <div class="flex gap-2">
+                <button type="submit" class="btn btn-primary btn-lg">Crear Orden</button>
+                <a href="/orders" class="btn btn-secondary btn-lg">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<%- include('footer.html') %>

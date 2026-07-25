@@ -1,0 +1,145 @@
+<%- include('header.html', { title: 'Orden #' + order.id, extraStyles: ['orders.css'] }) %>
+
+<div class="orders-page">
+    <div class="container">
+        <div class="order-detail-header">
+            <div>
+                <h1>Orden #<%= order.id %></h1>
+                <p class="text-muted">Detalle completo de la orden de laboratorio</p>
+            </div>
+            <div class="flex gap-2">
+                <% if (order.status !== 'published') { %>
+                    <a href="/orders/edit/<%= order.id %>" class="btn btn-secondary">Editar</a>
+                <% } %>
+                <a href="/orders" class="btn btn-secondary">← Volver</a>
+            </div>
+        </div>
+
+        <!-- Order Info -->
+        <div class="order-form-section">
+            <div class="order-info-grid">
+                <div class="order-info-item">
+                    <span class="order-info-label">Paciente</span>
+                    <span class="order-info-value"><%= order.patient_name %></span>
+                </div>
+                <div class="order-info-item">
+                    <span class="order-info-label">Estado</span>
+                    <span class="order-info-value">
+                        <% var statusMap = { 'draft': 'Borrador', 'specimen_collected': 'Muestra Tomada', 'in_analysis': 'En Análisis', 'results_entered': 'Resultados Ingresados', 'verified': 'Verificado', 'published': 'Publicado' }; %>
+                        <span class="badge badge-<%= order.status === 'published' ? 'success' : order.status === 'draft' ? 'warning' : 'info' %>">
+                            <%= statusMap[order.status] || order.status %>
+                        </span>
+                    </span>
+                </div>
+                <div class="order-info-item">
+                    <span class="order-info-label">Total</span>
+                    <span class="order-info-value">$<%= parseFloat(order.total_amount).toFixed(2) %></span>
+                </div>
+                <div class="order-info-item">
+                    <span class="order-info-label">Pago</span>
+                    <span class="order-info-value">
+                        <span class="badge badge-<%= order.paid ? 'success' : 'danger' %>">
+                            <%= order.paid ? 'Pagado' : 'Pendiente' %>
+                        </span>
+                    </span>
+                </div>
+                <div class="order-info-item">
+                    <span class="order-info-label">Fecha de Creación</span>
+                    <span class="order-info-value"><%= new Date(order.created_at).toLocaleDateString('es-ES') %></span>
+                </div>
+                <div class="order-info-item">
+                    <span class="order-info-label">Creado por</span>
+                    <span class="order-info-value"><%= order.created_by || '—' %></span>
+                </div>
+            </div>
+            <% if (order.notes) { %>
+                <div class="mt-2">
+                    <span class="order-info-label">Notas</span>
+                    <p class="mt-1"><%= order.notes %></p>
+                </div>
+            <% } %>
+        </div>
+
+        <!-- Tests Results -->
+        <div class="order-form-section">
+            <h3>🧪 Pruebas y Resultados</h3>
+            <% if (typeof orderTests !== 'undefined' && orderTests.length > 0) { %>
+                <div class="table-container" style="border: none; margin: 0 -1.5rem; border-radius: 0;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Prueba</th>
+                                <th>Resultado</th>
+                                <th>Rango Normal</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% orderTests.forEach(function(ot) { %>
+                                <tr>
+                                    <td><strong><%= ot.test_name_es %></strong></td>
+                                    <td>
+                                        <% if (ot.result_value) { %>
+                                            <span class="<%= ot.flag === 'high' ? 'result-high' : ot.flag === 'low' ? 'result-low' : 'result-normal' %>">
+                                                <%= ot.result_value %> <%= ot.unit || '' %>
+                                            </span>
+                                        <% } else if (ot.result_text) { %>
+                                            <span><%= ot.result_text %></span>
+                                        <% } else { %>
+                                            <span class="text-muted">—</span>
+                                        <% } %>
+                                    </td>
+                                    <td class="text-sm text-muted">
+                                        <%= ot.range_min || '' %> <%= ot.range_min ? '- ' + ot.range_max : '' %> <%= ot.range_min ? ot.unit || '' : '—' %>
+                                    </td>
+                                    <td>
+                                        <% var testStatusMap = { 'pending': 'Pendiente', 'specimen_collected': 'Muestra', 'in_analysis': 'Analizando', 'completed': 'Completado', 'verified': 'Verificado', 'published': 'Publicado' }; %>
+                                        <span class="badge badge-<%= ot.status === 'published' || ot.status === 'completed' ? 'success' : ot.status === 'pending' ? 'warning' : 'info' %>">
+                                            <%= testStatusMap[ot.status] || ot.status %>
+                                        </span>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            <% } else { %>
+                <div class="empty-state">
+                    <p>No hay pruebas asociadas a esta orden</p>
+                </div>
+            <% } %>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex gap-2 flex-wrap">
+            <% if (order.status === 'draft') { %>
+                <form action="/orders/<%= order.id %>/status" method="POST" style="display:inline;">
+                    <input type="hidden" name="status" value="specimen_collected">
+                    <button type="submit" class="btn btn-primary">Muestra Tomada</button>
+                </form>
+            <% } %>
+            <% if (order.status === 'specimen_collected') { %>
+                <form action="/orders/<%= order.id %>/status" method="POST" style="display:inline;">
+                    <input type="hidden" name="status" value="in_analysis">
+                    <button type="submit" class="btn btn-primary">Iniciar Análisis</button>
+                </form>
+            <% } %>
+            <% if (order.status === 'in_analysis' || order.status === 'results_entered') { %>
+                <a href="/orders/enter-results/<%= order.id %>" class="btn btn-warning">Ingresar Resultados</a>
+            <% } %>
+            <% if (order.status === 'results_entered' || order.status === 'verified') { %>
+                <form action="/orders/<%= order.id %>/status" method="POST" style="display:inline;">
+                    <input type="hidden" name="status" value="published">
+                    <button type="submit" class="btn btn-success">Publicar Resultados</button>
+                </form>
+            <% } %>
+            <% if (order.status === 'published') { %>
+                <button onclick="window.print()" class="btn btn-secondary">🖨️ Imprimir Recibo</button>
+                <a href="/orders/<%= order.id %>/pdf" class="btn btn-secondary">📄 Descargar PDF</a>
+                <a href="/orders/<%= order.id %>/share" class="btn btn-primary">📤 Compartir Resultados</a>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<%- include('footer.html') %>

@@ -1,0 +1,84 @@
+<%- include('header.html', { title: 'Órdenes', extraStyles: ['orders.css'] }) %>
+
+<div class="orders-page">
+    <div class="container">
+        <div class="orders-header">
+            <div>
+                <h1>Órdenes de Laboratorio</h1>
+                <p class="text-muted">Gestiona todas las órdenes de pruebas de laboratorio</p>
+            </div>
+            <a href="/orders/new" class="btn btn-primary">+ Nueva Orden</a>
+        </div>
+
+        <!-- Status Filters -->
+        <div class="order-status-filter mb-3">
+            <a href="/orders" class="btn btn-sm <%= !statusFilter ? 'btn-primary' : 'btn-secondary' %>">Todas</a>
+            <a href="/orders?status=draft" class="btn btn-sm <%= statusFilter === 'draft' ? 'btn-primary' : 'btn-secondary' %>">Borrador</a>
+            <a href="/orders?status=specimen_collected" class="btn btn-sm <%= statusFilter === 'specimen_collected' ? 'btn-primary' : 'btn-secondary' %>">Muestra</a>
+            <a href="/orders?status=in_analysis" class="btn btn-sm <%= statusFilter === 'in_analysis' ? 'btn-primary' : 'btn-secondary' %>">En Análisis</a>
+            <a href="/orders?status=results_entered" class="btn btn-sm <%= statusFilter === 'results_entered' ? 'btn-primary' : 'btn-secondary' %>">Resultados</a>
+            <a href="/orders?status=published" class="btn btn-sm <%= statusFilter === 'published' ? 'btn-primary' : 'btn-secondary' %>">Publicados</a>
+        </div>
+
+        <!-- Orders Table -->
+        <div class="dashboard-card">
+            <div class="dashboard-card-body" style="padding: 0;">
+                <% if (typeof orders !== 'undefined' && orders.length > 0) { %>
+                    <div class="table-container" style="border: none;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Paciente</th>
+                                    <th>Estado</th>
+                                    <th>Pruebas</th>
+                                    <th>Total</th>
+                                    <th>Pago</th>
+                                    <th>Fecha</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% orders.forEach(function(order) { %>
+                                    <tr>
+                                        <td><strong>#<%= order.id %></strong></td>
+                                        <td><%= order.patient_name %></td>
+                                        <td>
+                                            <% var statusMap = { 'draft': 'Borrador', 'specimen_collected': 'Muestra', 'in_analysis': 'En análisis', 'results_entered': 'Resultados', 'verified': 'Verificado', 'published': 'Publicado' }; %>
+                                            <span class="badge badge-<%= order.status === 'published' ? 'success' : order.status === 'draft' ? 'warning' : 'info' %>">
+                                                <%= statusMap[order.status] || order.status %>
+                                            </span>
+                                        </td>
+                                        <td><%= order.test_count || 0 %></td>
+                                        <td>$<%= parseFloat(order.total_amount).toFixed(2) %></td>
+                                        <td>
+                                            <span class="badge badge-<%= order.paid ? 'success' : 'danger' %>">
+                                                <%= order.paid ? 'Pagado' : 'Pendiente' %>
+                                            </span>
+                                        </td>
+                                        <td class="text-sm"><%= new Date(order.created_at).toLocaleDateString('es-ES') %></td>
+                                        <td>
+                                            <div class="flex gap-1">
+                                                <a href="/orders/view/<%= order.id %>" class="btn btn-sm btn-primary">Ver</a>
+                                                <% if (order.status !== 'published') { %>
+                                                    <a href="/orders/edit/<%= order.id %>" class="btn btn-sm btn-secondary">Editar</a>
+                                                <% } %>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                <% } else { %>
+                    <div class="empty-state">
+                        <p>No hay órdenes registradas</p>
+                        <a href="/orders/new" class="btn btn-primary btn-sm mt-2">Crear primera orden</a>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('footer.html') %>

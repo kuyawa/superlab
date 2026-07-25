@@ -1,0 +1,74 @@
+<%- include('header.html', { title: 'Mis Resultados', extraStyles: ['patient-results.css'] }) %>
+
+<div class="results-page">
+    <div class="container">
+        <% if (!authorized) { %>
+            <!-- Token verification form -->
+            <div class="results-card" style="max-width: 500px;">
+                <div class="results-header">
+                    <span style="font-size: 3rem; display: block; margin-bottom: 1rem;">🔬</span>
+                    <h1>Consultar Resultados</h1>
+                    <p class="text-muted">Ingresa el token de seguridad proporcionado por tu laboratorio</p>
+                </div>
+
+                <% if (typeof error !== 'undefined' && error) { %>
+                    <div class="alert alert-danger">⚠️ <%= error %></div>
+                <% } %>
+
+                <form action="/results/<%= patientId %>" method="POST" class="token-form">
+                    <div class="form-group">
+                        <label class="form-label" for="token">Token de Seguridad</label>
+                        <input type="text" id="token" name="token" class="form-input" 
+                               placeholder="Ingresa tu token" required 
+                               autocomplete="off" style="letter-spacing: 0.15em; font-size: 1.1rem;">
+                        <span class="form-hint">El token fue enviado a tu correo o WhatsApp</span>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block btn-lg">Ver Resultados</button>
+                </form>
+            </div>
+        <% } else { %>
+            <!-- Results Display -->
+            <div class="results-card">
+                <div class="results-lab-name">🔬 <%= labName || 'SuperLab' %></div>
+                
+                <% if (typeof patient !== 'undefined' && patient) { %>
+                <div class="results-patient-info">
+                    <p><strong>Paciente:</strong> <%= patient.full_name %></p>
+                    <p><strong>ID:</strong> <%= patient.national_id || '—' %></p>
+                    <p><strong>Fecha:</strong> <%= new Date().toLocaleDateString('es-ES') %></p>
+                </div>
+                <% } %>
+
+                <h3 style="margin-bottom: 1rem;">Resultados de Laboratorio</h3>
+
+                <% if (typeof results !== 'undefined' && results.length > 0) { %>
+                    <% results.forEach(function(r) { %>
+                        <div class="result-item">
+                            <div>
+                                <div class="result-name"><%= r.test_name_es %></div>
+                                <div class="result-range">
+                                    Rango normal: <%= r.range_min || '—' %> - <%= r.range_max || '—' %> <%= r.unit || '' %>
+                                </div>
+                            </div>
+                            <div class="result-value <%= r.flag === 'high' ? 'high' : r.flag === 'low' ? 'low' : 'normal' %>">
+                                <%= r.result_value || r.result_text || '—' %>
+                                <% if (r.result_value && r.unit) { %><small><%= r.unit %></small><% } %>
+                            </div>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <div class="empty-state">
+                        <p>No hay resultados disponibles para mostrar</p>
+                    </div>
+                <% } %>
+
+                <div class="mt-4 text-center">
+                    <p class="text-xs text-muted">Este informe es confidencial y de uso exclusivo del paciente.</p>
+                    <button onclick="window.print()" class="btn btn-secondary btn-sm mt-2">🖨️ Imprimir / Guardar PDF</button>
+                </div>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<%- include('footer.html') %>

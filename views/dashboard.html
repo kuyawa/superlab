@@ -1,0 +1,117 @@
+<%- include('header.html', { title: 'Panel de Control', extraStyles: ['dashboard.css'] }) %>
+
+<div class="dashboard-page">
+    <div class="container">
+        <div class="dashboard-header">
+            <h1>Panel de Control</h1>
+            <p>Bienvenido, <%= user.name %> — <%= user.role === 'admin' ? 'Administrador' : 'Asistente' %> de <%= user.lab_name || 'SuperLab' %></p>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-card-icon">📋</span>
+                <div class="stat-card-value"><%= stats.totalOrders || 0 %></div>
+                <div class="stat-card-label">Órdenes Totales</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-card-icon">⏳</span>
+                <div class="stat-card-value"><%= stats.pendingOrders || 0 %></div>
+                <div class="stat-card-label">Pendientes</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-card-icon">🧪</span>
+                <div class="stat-card-value"><%= stats.completedTests || 0 %></div>
+                <div class="stat-card-label">Pruebas Completadas</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-icon">👥</span>
+                <div class="stat-card-value"><%= stats.totalPatients || 0 %></div>
+                <div class="stat-card-label">Pacientes</div>
+            </div>
+        </div>
+
+        <!-- Grid -->
+        <div class="dashboard-grid">
+            <!-- Recent Orders -->
+            <div class="dashboard-card">
+                <div class="dashboard-card-header">
+                    <h3>Órdenes Recientes</h3>
+                    <a href="/orders" class="btn btn-sm btn-outline">Ver todas</a>
+                </div>
+                <div class="dashboard-card-body">
+                    <% if (typeof recentOrders !== 'undefined' && recentOrders.length > 0) { %>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Paciente</th>
+                                        <th>Estado</th>
+                                        <th>Total</th>
+                                        <th>Pago</th>
+                                        <th>Fecha</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% recentOrders.forEach(function(order) { %>
+                                        <tr>
+                                            <td><a href="/orders/view/<%= order.id %>">#<%= order.id %></a></td>
+                                            <td><%= order.patient_name %></td>
+                                            <td>
+                                                <% var statusMap = { 'draft': 'Borrador', 'specimen_collected': 'Muestra tomada', 'in_analysis': 'En análisis', 'results_entered': 'Resultados ingresados', 'verified': 'Verificado', 'published': 'Publicado' }; %>
+                                                <span class="badge badge-<%= order.status === 'published' ? 'success' : order.status === 'draft' ? 'warning' : 'info' %>">
+                                                    <%= statusMap[order.status] || order.status %>
+                                                </span>
+                                            </td>
+                                            <td>$<%= parseFloat(order.total_amount).toFixed(2) %></td>
+                                            <td>
+                                                <span class="badge badge-<%= order.paid ? 'success' : 'danger' %>">
+                                                    <%= order.paid ? 'Pagado' : 'Pendiente' %>
+                                                </span>
+                                            </td>
+                                            <td class="text-sm"><%= new Date(order.created_at).toLocaleDateString('es-ES') %></td>
+                                        </tr>
+                                    <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
+                    <% } else { %>
+                        <div class="empty-state">
+                            <p>No hay órdenes recientes</p>
+                            <a href="/orders/new" class="btn btn-primary btn-sm mt-2">Crear primera orden</a>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+
+            <!-- Activity Log -->
+            <div class="dashboard-card">
+                <div class="dashboard-card-header">
+                    <h3>Actividad Reciente</h3>
+                </div>
+                <div class="dashboard-card-body">
+                    <% if (typeof recentActivity !== 'undefined' && recentActivity.length > 0) { %>
+                        <% recentActivity.forEach(function(activity) { %>
+                            <div class="activity-item">
+                                <div class="activity-icon <%= activity.action %>">
+                                    <%= activity.action === 'login' ? '🔑' : activity.action === 'create_order' ? '📋' : activity.action === 'enter_results' ? '✏️' : '📤' %>
+                                </div>
+                                <div class="activity-content">
+                                    <p><%= activity.description %></p>
+                                    <span class="activity-time"><%= new Date(activity.created_at).toLocaleString('es-ES') %></span>
+                                </div>
+                            </div>
+                        <% }); %>
+                    <% } else { %>
+                        <div class="empty-state">
+                            <p>No hay actividad reciente</p>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('footer.html') %>

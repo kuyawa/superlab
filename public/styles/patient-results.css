@@ -1,0 +1,97 @@
+/* Patient Results View */
+
+.results-page {
+    min-height: 100vh;
+    padding: 3rem 0;
+    background: var(--bg-secondary);
+}
+
+.results-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.results-header h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.results-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: 2.5rem;
+    box-shadow: var(--shadow-lg);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.results-lab-name {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent-primary);
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.results-patient-info {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
+}
+
+.results-patient-info p {
+    margin-bottom: 0.25rem;
+    font-size: 0.95rem;
+}
+
+.result-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.result-item:last-child {
+    border-bottom: none;
+}
+
+.result-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.result-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.result-value.normal { color: var(--success); }
+.result-value.high { color: var(--danger); }
+.result-value.low { color: var(--info); }
+
+.result-range {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.token-form {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.token-form .form-input {
+    text-align: center;
+    font-size: 1.25rem;
+    letter-spacing: 0.25em;
+}
+
+@media (max-width: 480px) {
+    .results-card {
+        padding: 1.5rem;
+    }
+}

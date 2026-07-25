@@ -1,0 +1,125 @@
+<%- include('header.html', { title: 'Registro', extraStyles: ['auth.css'] }) %>
+
+<div class="auth-page">
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <span class="auth-icon">🚀</span>
+                <h1>Crear Cuenta</h1>
+                <p>Registra tu laboratorio en SuperLab y comienza a gestionar</p>
+            </div>
+
+            <% if (typeof error !== 'undefined' && error) { %>
+                <div class="alert alert-danger auth-alert">
+                    <span>⚠️</span>
+                    <span><%= error %></span>
+                </div>
+            <% } %>
+
+            <% if (typeof success !== 'undefined' && success) { %>
+                <div class="alert alert-success auth-alert">
+                    <span>✅</span>
+                    <span><%= success %></span>
+                </div>
+            <% } %>
+
+            <form action="/register" method="POST" class="auth-form" data-validate>
+                <div class="form-group">
+                    <label class="form-label" for="lab_name">Nombre del Laboratorio</label>
+                    <input type="text" id="lab_name" name="lab_name" class="form-input" 
+                           placeholder="Ej: Laboratorio Clínico Central" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="name">Nombre Completo</label>
+                    <input type="text" id="name" name="name" class="form-input" 
+                           placeholder="Tu nombre completo" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="email">Correo Electrónico</label>
+                    <input type="email" id="email" name="email" class="form-input" 
+                           placeholder="tu@correo.com" required autocomplete="email">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="phone">Teléfono</label>
+                    <input type="tel" id="phone" name="phone" class="form-input" 
+                           placeholder="+1 555-000-0000">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="national_id">Cédula / Identificación</label>
+                    <input type="text" id="national_id" name="national_id" class="form-input" 
+                           placeholder="000-0000000-00">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="password">Contraseña</label>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="password" name="password" class="form-input" 
+                               placeholder="Mínimo 8 caracteres" required minlength="8">
+                        <button type="button" class="password-toggle" onclick="togglePassword('password')" aria-label="Mostrar contraseña">
+                            👁️
+                        </button>
+                    </div>
+                    <span class="form-hint">La contraseña debe tener al menos 8 caracteres</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="confirm_password">Confirmar Contraseña</label>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="confirm_password" name="confirm_password" class="form-input" 
+                               placeholder="Repite la contraseña" required>
+                        <button type="button" class="password-toggle" onclick="togglePassword('confirm_password')" aria-label="Mostrar contraseña">
+                            👁️
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Plan</label>
+                    <div class="flex gap-2" style="flex-wrap: wrap;">
+                        <label class="form-check" style="padding: 0.75rem 1rem; border: 2px solid var(--border-color); border-radius: var(--radius-md); cursor: pointer; flex: 1;">
+                            <input type="radio" name="plan" value="FREE" checked>
+                            <span><strong>Gratis</strong> - 0$/mes</span>
+                        </label>
+                        <label class="form-check" style="padding: 0.75rem 1rem; border: 2px solid var(--border-color); border-radius: var(--radius-md); cursor: pointer; flex: 1;">
+                            <input type="radio" name="plan" value="BASIC">
+                            <span><strong>Básico</strong> - $10/mes</span>
+                        </label>
+                        <label class="form-check" style="padding: 0.75rem 1rem; border: 2px solid var(--border-color); border-radius: var(--radius-md); cursor: pointer; flex: 1;">
+                            <input type="radio" name="plan" value="PRO">
+                            <span><strong>Pro</strong> - $25/mes</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block btn-lg">Crear Cuenta</button>
+            </form>
+
+            <div class="auth-footer">
+                <p>¿Ya tienes cuenta? <a href="/login">Inicia sesión</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function togglePassword(id) {
+    const input = document.getElementById(id);
+    input.type = input.type === 'password' ? 'text' : 'password';
+}
+
+// Validate passwords match
+document.querySelector('form').addEventListener('submit', function(e) {
+    const password = document.getElementById('password').value;
+    const confirm = document.getElementById('confirm_password').value;
+    if (password !== confirm) {
+        e.preventDefault();
+        alert('Las contraseñas no coinciden');
+    }
+});
+</script>
+
+<%- include('footer.html') %>

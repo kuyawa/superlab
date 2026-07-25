@@ -1,0 +1,86 @@
+<%- include('header.html', { title: 'Compartir Resultados', extraStyles: ['dashboard.css', 'patient-results.css'] }) %>
+
+<div class="dashboard-page">
+    <div class="container">
+        <div class="results-card" style="max-width: 600px; margin: 0 auto;">
+            <div class="results-header">
+                <span style="font-size: 3rem; display: block; margin-bottom: 1rem;">📤</span>
+                <h1>Compartir Resultados</h1>
+                <p class="text-muted">Orden #<%= order.id %> — <%= order.patient_name %></p>
+            </div>
+
+            <div class="order-form-section" style="border: 2px solid var(--accent-primary);">
+                <h3>🔗 Enlace de Acceso</h3>
+                <div class="form-group">
+                    <label class="form-label">URL para el paciente</label>
+                    <div class="flex gap-1">
+                        <input type="text" class="form-input" value="<%= shareUrl %>" readonly id="shareUrl" style="font-size: 0.85rem;">
+                        <button class="btn btn-primary" onclick="copyUrl()">Copiar</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Token de Seguridad</label>
+                    <div class="flex gap-1 items-center">
+                        <input type="text" class="form-input" value="<%= shareToken %>" readonly id="shareToken" 
+                               style="font-size: 1.25rem; letter-spacing: 0.15em; text-align: center; font-weight: 700; color: var(--accent-primary);">
+                        <button class="btn btn-secondary" onclick="copyToken()">Copiar</button>
+                    </div>
+                    <span class="form-hint">Este token es único y expira en 7 días</span>
+                </div>
+            </div>
+
+            <div class="order-form-section">
+                <h3>📱 Enviar al Paciente</h3>
+                <p class="text-sm text-muted mb-2">Copia el siguiente mensaje para enviarlo al paciente:</p>
+                <div class="form-group">
+                    <textarea class="form-textarea" rows="4" readonly id="messageText">
+Tus resultados de laboratorio están disponibles.
+
+Ingresa a: <%= shareUrl %>
+Usa este token: <%= shareToken %}
+
+SuperLab - Resultados Seguros</textarea>
+                    <button class="btn btn-secondary btn-sm mt-1" onclick="copyMessage()">Copiar Mensaje</button>
+                </div>
+                
+                <div class="flex gap-2 mt-2">
+                    <button class="btn btn-primary" onclick="alert('📧 Función de email será implementada próximamente')">
+                        📧 Enviar por Email
+                    </button>
+                    <button class="btn btn-success" onclick="alert('📱 Función de WhatsApp será implementada próximamente')">
+                        📱 Enviar por WhatsApp
+                    </button>
+                </div>
+            </div>
+
+            <div class="text-center mt-3">
+                <a href="/orders/view/<%= order.id %>" class="btn btn-secondary">← Volver a la Orden</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function copyUrl() {
+    const input = document.getElementById('shareUrl');
+    input.select();
+    document.execCommand('copy');
+    alert('URL copiada al portapapeles');
+}
+
+function copyToken() {
+    const input = document.getElementById('shareToken');
+    input.select();
+    document.execCommand('copy');
+    alert('Token copiado al portapapeles');
+}
+
+function copyMessage() {
+    const textarea = document.getElementById('messageText');
+    textarea.select();
+    document.execCommand('copy');
+    alert('Mensaje copiado al portapapeles');
+}
+</script>
+
+<%- include('footer.html') %>

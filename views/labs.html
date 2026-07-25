@@ -1,0 +1,32 @@
+<%- include('header.html', { title: 'Laboratorios', extraStyles: ['labs.css'] }) %>
+
+<div class="labs-page">
+    <div class="container">
+        <div class="labs-header">
+            <h1>Laboratorios Disponibles</h1>
+            <p>Selecciona un laboratorio para ver sus pruebas y precios disponibles</p>
+        </div>
+
+        <div class="labs-grid">
+            <% if (typeof labs !== 'undefined' && labs.length > 0) { %>
+                <% labs.forEach(function(lab) { %>
+                    <div class="lab-card" onclick="window.location='/labs/view/<%= lab.id %>'">
+                        <span class="lab-icon">🔬</span>
+                        <h3><%= lab.name %></h3>
+                        <p><%= lab.address || 'Dirección no especificada' %></p>
+                        <p class="text-sm"><%= lab.phone || '' %></p>
+                        <div class="lab-meta">
+                            <span><%= lab.test_count || 0 %> pruebas disponibles</span>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <div class="empty-state" style="grid-column: 1/-1;">
+                    <p>No hay laboratorios registrados actualmente</p>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<%- include('footer.html') %>

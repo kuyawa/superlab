@@ -1,0 +1,21 @@
+<%- include('header.html', { title: 'Error' }) %>
+
+<div style="min-height: 60vh; display: flex; align-items: center; justify-content: center; padding: 2rem;">
+    <div class="text-center" style="max-width: 500px;">
+        <span style="font-size: 5rem; display: block; margin-bottom: 1rem;">
+            <%= typeof code !== 'undefined' && code === 404 ? '🔍' : '⚠️' %>
+        </span>
+        <h1 style="font-size: 3rem; margin-bottom: 0.5rem;">
+            <%= typeof code !== 'undefined' ? code : 'Error' %>
+        </h1>
+        <p style="font-size: 1.2rem; color: var(--text-secondary); margin-bottom: 2rem;">
+            <%= typeof error !== 'undefined' ? error : 'Ha ocurrido un error inesperado' %>
+        </p>
+        <div class="flex gap-2 justify-center">
+            <a href="/" class="btn btn-primary">Ir al Inicio</a>
+            <a href="javascript:history.back()" class="btn btn-secondary">Volver Atrás</a>
+        </div>
+    </div>
+</div>
+
+<%- include('footer.html') %>

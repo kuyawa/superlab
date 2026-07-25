@@ -1,0 +1,47 @@
+<%- include('header.html', { title: lab.name, extraStyles: ['labs.css'] }) %>
+
+<div class="labs-page">
+    <div class="container">
+        <div class="labs-header">
+            <h1><%= lab.name %></h1>
+            <p><%= lab.address || '' %> <%= lab.phone ? '— ' + lab.phone : '' %></p>
+            <a href="/labs" class="btn btn-sm btn-secondary mt-2">← Todos los laboratorios</a>
+        </div>
+
+        <div class="lab-tests">
+            <h2>Pruebas y Precios</h2>
+            <% if (typeof tests !== 'undefined' && tests.length > 0) { %>
+                <% tests.forEach(function(test) { %>
+                    <div class="test-item">
+                        <div class="test-info">
+                            <h4><%= test.name_es %></h4>
+                            <p><%= test.description || '' %> <%= test.unit ? '— ' + test.unit : '' %></p>
+                        </div>
+                        <div class="test-price">$<%= parseFloat(test.base_price).toFixed(2) %></div>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <div class="empty-state">
+                    <p>Este laboratorio no tiene pruebas disponibles aún</p>
+                </div>
+            <% } %>
+        </div>
+
+        <% if (typeof panels !== 'undefined' && panels.length > 0) { %>
+        <div class="lab-tests">
+            <h2>Paquetes / Paneles</h2>
+            <% panels.forEach(function(panel) { %>
+                <div class="test-item" style="border-color: var(--accent-primary);">
+                    <div class="test-info">
+                        <h4>📦 <%= panel.name_es %></h4>
+                        <p><%= panel.description || '' %></p>
+                    </div>
+                    <div class="test-price">$<%= parseFloat(panel.combined_price).toFixed(2) %></div>
+                </div>
+            <% }); %>
+        </div>
+        <% } %>
+    </div>
+</div>
+
+<%- include('footer.html') %>

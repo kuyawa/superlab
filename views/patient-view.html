@@ -1,0 +1,103 @@
+<%- include('header.html', { title: 'Paciente: ' + patient.full_name, extraStyles: ['patients.css'] }) %>
+
+<div class="patients-page">
+    <div class="container">
+        <div class="patients-header">
+            <div>
+                <h1><%= patient.full_name %></h1>
+                <p class="text-muted">Historial de pruebas y resultados del paciente</p>
+            </div>
+            <a href="/admin/patients" class="btn btn-secondary">← Todos los Pacientes</a>
+        </div>
+
+        <!-- Patient Info -->
+        <div class="order-form-section">
+            <h3>👤 Información del Paciente</h3>
+            <div class="patient-info-grid">
+                <div class="patient-info-item">
+                    <span class="patient-info-label">Cédula / ID</span>
+                    <span class="patient-info-value"><%= patient.national_id || '—' %></span>
+                </div>
+                <div class="patient-info-item">
+                    <span class="patient-info-label">Teléfono</span>
+                    <span class="patient-info-value"><%= patient.phone || '—' %></span>
+                </div>
+                <div class="patient-info-item">
+                    <span class="patient-info-label">Email</span>
+                    <span class="patient-info-value"><%= patient.email || '—' %></span>
+                </div>
+                <div class="patient-info-item">
+                    <span class="patient-info-label">Fecha de Nacimiento</span>
+                    <span class="patient-info-value"><%= patient.date_of_birth ? new Date(patient.date_of_birth).toLocaleDateString('es-ES') : '—' %></span>
+                </div>
+                <div class="patient-info-item">
+                    <span class="patient-info-label">Sexo</span>
+                    <span class="patient-info-value"><%= patient.sex === 'Male' ? 'Masculino' : patient.sex === 'Female' ? 'Femenino' : '—' %></span>
+                </div>
+                <div class="patient-info-item">
+                    <span class="patient-info-label">Dirección</span>
+                    <span class="patient-info-value"><%= patient.address || '—' %></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Orders History -->
+        <div class="order-form-section">
+            <h3>📋 Historial de Órdenes</h3>
+            <% if (typeof orders !== 'undefined' && orders.length > 0) { %>
+                <div class="table-container" style="border: none; margin: 0 -1.5rem; border-radius: 0;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th># Orden</th>
+                                <th>Fecha</th>
+                                <th>Pruebas</th>
+                                <th>Estado</th>
+                                <th>Total</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% orders.forEach(function(order) { %>
+                                <tr>
+                                    <td><strong>#<%= order.id %></strong></td>
+                                    <td><%= new Date(order.created_at).toLocaleDateString('es-ES') %></td>
+                                    <td><%= order.test_count || 0 %></td>
+                                    <td>
+                                        <% var statusMap = { 'draft': 'Borrador', 'specimen_collected': 'Muestra', 'in_analysis': 'En análisis', 'results_entered': 'Resultados', 'verified': 'Verificado', 'published': 'Publicado' }; %>
+                                        <span class="badge badge-<%= order.status === 'published' ? 'success' : order.status === 'draft' ? 'warning' : 'info' %>">
+                                            <%= statusMap[order.status] || order.status %>
+                                        </span>
+                                    </td>
+                                    <td>$<%= parseFloat(order.total_amount).toFixed(2) %></td>
+                                    <td><a href="/orders/view/<%= order.id %>" class="btn btn-sm btn-primary">Ver</a></td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            <% } else { %>
+                <div class="empty-state"><p>Este paciente no tiene órdenes registradas</p></div>
+            <% } %>
+        </div>
+
+        <!-- AI Queries -->
+        <% if (typeof queries !== 'undefined' && queries.length > 0) { %>
+        <div class="order-form-section">
+            <h3>🤖 Consultas Inteligentes</h3>
+            <% queries.forEach(function(q) { %>
+                <div class="activity-item">
+                    <div class="activity-icon" style="background: var(--accent-light);">🤖</div>
+                    <div class="activity-content">
+                        <p><strong>Consulta:</strong> <%= q.query %></p>
+                        <p class="text-sm"><strong>Respuesta:</strong> <%= q.response || 'Pendiente...' %></p>
+                        <span class="activity-time"><%= new Date(q.created_at).toLocaleString('es-ES') %></span>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+        <% } %>
+    </div>
+</div>
+
+<%- include('footer.html') %>

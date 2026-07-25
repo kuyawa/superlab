@@ -1,0 +1,10 @@
+.DS_Store
+.env
+.env.local
+.env.server
+.memory.json
+package-lock.json
+stderr.log
+/.backups
+/node_modules
+/work

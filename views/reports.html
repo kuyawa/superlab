@@ -1,0 +1,90 @@
+<%- include('header.html', { title: 'Reportes', extraStyles: ['dashboard.css'] }) %>
+
+<div class="dashboard-page">
+    <div class="container">
+        <div class="dashboard-header">
+            <h1>Reportes y Estadísticas</h1>
+            <p>Visualiza el rendimiento y las estadísticas de tu laboratorio</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-card-icon">📋</span>
+                <div class="stat-card-value"><%= stats.totalOrders || 0 %></div>
+                <div class="stat-card-label">Órdenes Totales</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-card-icon">⏳</span>
+                <div class="stat-card-value"><%= stats.pendingOrders || 0 %></div>
+                <div class="stat-card-label">Órdenes Pendientes</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-card-icon">✅</span>
+                <div class="stat-card-value"><%= stats.publishedResults || 0 %></div>
+                <div class="stat-card-label">Resultados Publicados</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-card-icon">💰</span>
+                <div class="stat-card-value"><%= stats.unpaidOrders || 0 %></div>
+                <div class="stat-card-label">Pagos Pendientes</div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Daily Orders Chart (simplified) -->
+            <div class="dashboard-card">
+                <div class="dashboard-card-header">
+                    <h3>Órdenes por Día (Últimos 7 días)</h3>
+                </div>
+                <div class="dashboard-card-body">
+                    <% if (typeof dailyOrders !== 'undefined' && dailyOrders.length > 0) { %>
+                        <div style="display: flex; gap: 0.5rem; align-items: flex-end; min-height: 200px; padding: 1rem 0;">
+                            <% var maxCount = Math.max(...dailyOrders.map(d => parseInt(d.count)), 1); %>
+                            <% dailyOrders.forEach(function(day) { %>
+                                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.25rem;">
+                                    <span style="font-size: 0.8rem; font-weight: 700; color: var(--accent-primary);"><%= day.count %></span>
+                                    <div style="width: 100%; background: var(--accent-primary); border-radius: 4px 4px 0 0; 
+                                         height: <%= (parseInt(day.count) / maxCount) * 150 %>px; min-height: 20px;
+                                         transition: var(--transition); opacity: 0.8;">
+                                    </div>
+                                    <span style="font-size: 0.7rem; color: var(--text-muted);">
+                                        <%= new Date(day.date).toLocaleDateString('es-ES', { weekday: 'short' }) %>
+                                    </span>
+                                </div>
+                            <% }); %>
+                        </div>
+                    <% } else { %>
+                        <div class="empty-state">
+                            <p>No hay datos de órdenes en los últimos 7 días</p>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+
+            <!-- Quick Reports -->
+            <div class="dashboard-card">
+                <div class="dashboard-card-header">
+                    <h3>Reportes Rápidos</h3>
+                </div>
+                <div class="dashboard-card-body">
+                    <div class="flex flex-col gap-2">
+                        <a href="/orders?status=pending" class="btn btn-secondary btn-block">
+                            ⏳ Órdenes Pendientes
+                        </a>
+                        <a href="/orders?status=published" class="btn btn-secondary btn-block">
+                            ✅ Resultados Publicados
+                        </a>
+                        <a href="/admin/patients" class="btn btn-secondary btn-block">
+                            👥 Lista de Pacientes
+                        </a>
+                        <button class="btn btn-secondary btn-block" onclick="window.print()">
+                            🖨️ Imprimir Reporte
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('footer.html') %>

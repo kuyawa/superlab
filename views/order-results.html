@@ -1,0 +1,56 @@
+<%- include('header.html', { title: 'Ingresar Resultados - Orden #' + order.id, extraStyles: ['orders.css'] }) %>
+
+<div class="orders-page">
+    <div class="container">
+        <div class="orders-header">
+            <div>
+                <h1>Ingresar Resultados</h1>
+                <p class="text-muted">Orden #<%= order.id %> — <%= order.patient_name %></p>
+            </div>
+        </div>
+
+        <form action="/orders/enter-results/<%= order.id %>" method="POST">
+            <div class="order-form-section">
+                <h3>🧪 Resultados de Pruebas</h3>
+                <% if (typeof orderTests !== 'undefined' && orderTests.length > 0) { %>
+                    <% orderTests.forEach(function(ot) { %>
+                        <div class="test-item" style="margin-bottom: 1rem; <%= ot.flag === 'high' ? 'border-left: 4px solid var(--danger);' : ot.flag === 'low' ? 'border-left: 4px solid var(--info);' : '' %>">
+                            <div class="test-info" style="flex: 1;">
+                                <h4><%= ot.test_name_es %></h4>
+                                <p class="text-sm text-muted">
+                                    <%= ot.unit ? 'Unidad: ' + ot.unit : '' %>
+                                    <% if (ot.range_min !== null) { %>
+                                        | Rango: <%= ot.range_min %> - <%= ot.range_max %> <%= ot.unit || '' %>
+                                    <% } %>
+                                </p>
+                            </div>
+                            <div style="min-width: 200px;">
+                                <input type="hidden" name="test_ids" value="<%= ot.test_id %>">
+                                <div class="flex gap-1 items-center">
+                                    <input type="text" name="result_<%= ot.test_id %>" class="form-input result-input" 
+                                           placeholder="Valor" value="<%= ot.result_value || '' %>">
+                                    <select name="flag_<%= ot.test_id %>" class="form-select" style="width: auto;">
+                                        <option value="">Normal</option>
+                                        <option value="high" <%= ot.flag === 'high' ? 'selected' : '' %>>↑ Alto</option>
+                                        <option value="low" <%= ot.flag === 'low' ? 'selected' : '' %>>↓ Bajo</option>
+                                    </select>
+                                </div>
+                                <input type="text" name="text_<%= ot.test_id %>" class="form-input mt-1" 
+                                       placeholder="Texto interpretativo (opcional)" value="<%= ot.result_text || '' %>">
+                            </div>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <div class="empty-state"><p>No hay pruebas en esta orden</p></div>
+                <% } %>
+            </div>
+
+            <div class="flex gap-2">
+                <button type="submit" class="btn btn-primary btn-lg">Guardar Resultados</button>
+                <a href="/orders/view/<%= order.id %>" class="btn btn-secondary btn-lg">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<%- include('footer.html') %>

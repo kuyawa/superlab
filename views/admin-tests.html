@@ -1,0 +1,212 @@
+<%- include('header.html', { title: 'Pruebas', extraStyles: ['dashboard.css'] }) %>
+
+<div class="dashboard-page">
+    <div class="container">
+        <div class="dashboard-header">
+            <h1>Gestión de Pruebas</h1>
+            <p>Administra el catálogo de pruebas de laboratorio</p>
+        </div>
+
+        <% if (typeof error !== 'undefined' && error) { %>
+            <div class="alert alert-danger"><%= error %></div>
+        <% } %>
+        <% if (typeof success !== 'undefined' && success) { %>
+            <div class="alert alert-success"><%= success %></div>
+        <% } %>
+
+        <div class="dashboard-grid">
+            <div class="dashboard-card">
+                <div class="dashboard-card-header">
+                    <h3>Catálogo de Pruebas</h3>
+                    <button class="btn btn-sm btn-primary" onclick="openModal('newTestModal')">+ Nueva Prueba</button>
+                </div>
+                <div class="dashboard-card-body" style="padding: 0;">
+                    <% if (typeof tests !== 'undefined' && tests.length > 0) { %>
+                        <div class="table-container" style="border: none;">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Código</th>
+                                        <th>Nombre</th>
+                                        <th>Categoría</th>
+                                        <th>Precio</th>
+                                        <th>Unidad</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% tests.forEach(function(test) { %>
+                                        <tr>
+                                            <td><span class="badge badge-info"><%= test.code %></span></td>
+                                            <td><strong><%= test.name_es %></strong></td>
+                                            <td><%= test.category_name || '—' %></td>
+                                            <td>$<%= parseFloat(test.base_price).toFixed(2) %></td>
+                                            <td><%= test.unit || '—' %></td>
+                                            <td>
+                                                <button class="btn btn-sm btn-secondary" onclick="editTest(<%= test.id %>)">Editar</button>
+                                                <button class="btn btn-sm btn-secondary" onclick="viewRanges(<%= test.id %>)">Rangos</button>
+                                            </td>
+                                        </tr>
+                                    <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
+                    <% } else { %>
+                        <div class="empty-state">
+                            <p>No hay pruebas configuradas. Usa el catálogo incluido o crea nuevas pruebas.</p>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="dashboard-card">
+                <div class="dashboard-card-header">
+                    <h3>Acciones Rápidas</h3>
+                </div>
+                <div class="dashboard-card-body">
+                    <div class="flex flex-col gap-2">
+                        <button class="btn btn-primary btn-block" onclick="openModal('newTestModal')">➕ Nueva Prueba</button>
+                        <button class="btn btn-secondary btn-block" onclick="openModal('newCategoryModal')">📁 Nueva Categoría</button>
+                        <button class="btn btn-secondary btn-block" onclick="openModal('newPanelModal')">📦 Nuevo Panel</button>
+                        <a href="/reports" class="btn btn-secondary btn-block">📊 Ver Reportes</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- New Test Modal -->
+<div class="modal-overlay" id="newTestModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Nueva Prueba de Laboratorio</h3>
+            <button class="modal-close" onclick="closeModal('newTestModal')">&times;</button>
+        </div>
+        <form action="/admin/tests/new" method="POST">
+            <div class="form-group">
+                <label class="form-label">Nombre (Español) *</label>
+                <input type="text" name="name_es" class="form-input" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Nombre (Inglés)</label>
+                <input type="text" name="name" class="form-input">
+            </div>
+            <div class="grid grid-2">
+                <div class="form-group">
+                    <label class="form-label">Código Único *</label>
+                    <input type="text" name="code" class="form-input" placeholder="Ej: CBC-001" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Categoría</label>
+                    <select name="category_id" class="form-select">
+                        <option value="">Sin categoría</option>
+                        <% if (typeof categories !== 'undefined') { %>
+                            <% categories.forEach(function(cat) { %>
+                                <option value="<%= cat.id %>"><%= cat.name_es %></option>
+                            <% }); %>
+                        <% } %>
+                    </select>
+                </div>
+            </div>
+            <div class="grid grid-2">
+                <div class="form-group">
+                    <label class="form-label">Precio Base *</label>
+                    <input type="number" name="base_price" class="form-input" step="0.01" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Unidad de Medida</label>
+                    <input type="text" name="unit" class="form-input" placeholder="mg/dL, IU/L, etc.">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Metodología</label>
+                <input type="text" name="methodology" class="form-input" placeholder="Espectrofotometría, Quimioluminiscencia, etc.">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Descripción</label>
+                <textarea name="description" class="form-textarea"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Crear Prueba</button>
+        </form>
+    </div>
+</div>
+
+<!-- New Category Modal -->
+<div class="modal-overlay" id="newCategoryModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Nueva Categoría</h3>
+            <button class="modal-close" onclick="closeModal('newCategoryModal')">&times;</button>
+        </div>
+        <form action="/admin/categories/new" method="POST">
+            <div class="form-group">
+                <label class="form-label">Nombre (Español) *</label>
+                <input type="text" name="name_es" class="form-input" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Nombre (Inglés)</label>
+                <input type="text" name="name" class="form-input">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Orden de Visualización</label>
+                <input type="number" name="display_order" class="form-input" value="0" min="0">
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Crear Categoría</button>
+        </form>
+    </div>
+</div>
+
+<!-- New Panel Modal -->
+<div class="modal-overlay" id="newPanelModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Nuevo Panel / Perfil</h3>
+            <button class="modal-close" onclick="closeModal('newPanelModal')">&times;</button>
+        </div>
+        <form action="/admin/panels/new" method="POST">
+            <div class="form-group">
+                <label class="form-label">Nombre (Español) *</label>
+                <input type="text" name="name_es" class="form-input" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Nombre (Inglés)</label>
+                <input type="text" name="name" class="form-input">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Precio Combinado</label>
+                <input type="number" name="combined_price" class="form-input" step="0.01" min="0">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Descripción</label>
+                <textarea name="description" class="form-textarea"></textarea>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Pruebas Incluidas</label>
+                <div style="max-height: 200px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 0.5rem;">
+                    <% if (typeof tests !== 'undefined') { %>
+                        <% tests.forEach(function(test) { %>
+                            <div class="test-select-item">
+                                <input type="checkbox" name="test_ids" value="<%= test.id %>" id="panel_test_<%= test.id %>">
+                                <label for="panel_test_<%= test.id %>"><%= test.name_es %></label>
+                            </div>
+                        <% }); %>
+                    <% } %>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block mt-2">Crear Panel</button>
+        </form>
+    </div>
+</div>
+
+<script>
+function editTest(id) {
+    window.location = '/admin/tests/edit/' + id;
+}
+function viewRanges(id) {
+    window.location = '/admin/tests/ranges/' + id;
+}
+</script>
+
+<%- include('footer.html') %>

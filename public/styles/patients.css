@@ -1,0 +1,61 @@
+/* Patients Page Styles */
+
+.patients-page {
+    padding: 2rem 0;
+    min-height: calc(100vh - 70px);
+}
+
+.patients-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.patients-header h1 {
+    margin-bottom: 0;
+}
+
+.patient-info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.patient-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.patient-info-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+}
+
+.patient-info-value {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.search-form {
+    display: flex;
+    gap: 0.75rem;
+    max-width: 500px;
+}
+
+.search-form .form-input {
+    flex: 1;
+}
+
+@media (max-width: 768px) {
+    .patient-info-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

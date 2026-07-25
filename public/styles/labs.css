@@ -1,0 +1,112 @@
+/* Labs Listing Page */
+
+.labs-page {
+    padding: 3rem 0;
+    min-height: calc(100vh - 70px);
+}
+
+.labs-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.labs-header h1 {
+    margin-bottom: 0.5rem;
+}
+
+.labs-header p {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.labs-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+.lab-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    padding: 2rem;
+    text-align: center;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.lab-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--accent-primary);
+}
+
+.lab-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.lab-card h3 {
+    margin-bottom: 0.5rem;
+}
+
+.lab-card p {
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.lab-card .lab-meta {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-light);
+}
+
+.lab-tests {
+    margin-top: 3rem;
+}
+
+.lab-tests h2 {
+    margin-bottom: 1.5rem;
+}
+
+.test-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    margin-bottom: 0.75rem;
+    transition: var(--transition);
+}
+
+.test-item:hover {
+    background: var(--bg-secondary);
+    border-color: var(--accent-primary);
+}
+
+.test-info h4 {
+    margin-bottom: 0.15rem;
+    font-size: 1rem;
+}
+
+.test-info p {
+    font-size: 0.85rem;
+    margin-bottom: 0;
+    color: var(--text-muted);
+}
+
+.test-price {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--accent-primary);
+}
+
+@media (max-width: 768px) {
+    .labs-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,124 @@
+<%- include('header.html', { title: 'Pacientes', extraStyles: ['patients.css'] }) %>
+
+<div class="patients-page">
+    <div class="container">
+        <div class="patients-header">
+            <div>
+                <h1>Pacientes</h1>
+                <p class="text-muted">Gestión de pacientes registrados en el laboratorio</p>
+            </div>
+            <button class="btn btn-primary" onclick="openModal('newPatientModal')">+ Nuevo Paciente</button>
+        </div>
+
+        <!-- Search -->
+        <form action="/admin/patients" method="GET" class="search-form mb-3">
+            <input type="text" name="search" class="form-input" placeholder="Buscar por nombre, cédula o teléfono..." value="<%= search || '' %>">
+            <button type="submit" class="btn btn-primary">🔍 Buscar</button>
+        </form>
+
+        <!-- Patients Table -->
+        <div class="dashboard-card">
+            <div class="dashboard-card-body" style="padding: 0;">
+                <% if (typeof patients !== 'undefined' && patients.length > 0) { %>
+                    <div class="table-container" style="border: none;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Cédula</th>
+                                    <th>Teléfono</th>
+                                    <th>Email</th>
+                                    <th>Sexo</th>
+                                    <th>Órdenes</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% patients.forEach(function(p) { %>
+                                    <tr>
+                                        <td><strong><%= p.full_name %></strong></td>
+                                        <td><%= p.national_id || '—' %></td>
+                                        <td><%= p.phone || '—' %></td>
+                                        <td><%= p.email || '—' %></td>
+                                        <td><%= p.sex || '—' %></td>
+                                        <td><span class="badge badge-info"><%= p.order_count || 0 %></span></td>
+                                        <td>
+                                            <div class="flex gap-1">
+                                                <a href="/admin/patients/view/<%= p.id %>" class="btn btn-sm btn-primary">Ver</a>
+                                                <button class="btn btn-sm btn-secondary" onclick="editPatient(<%= p.id %>, '<%= p.full_name %>', '<%= p.national_id || '' %>', '<%= p.phone || '' %>', '<%= p.email || '' %>')">Editar</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                <% } else { %>
+                    <div class="empty-state">
+                        <p>No se encontraron pacientes</p>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- New Patient Modal -->
+<div class="modal-overlay" id="newPatientModal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Nuevo Paciente</h3>
+            <button class="modal-close" onclick="closeModal('newPatientModal')">&times;</button>
+        </div>
+        <form action="/admin/patients/new" method="POST">
+            <div class="form-group">
+                <label class="form-label">Nombre Completo</label>
+                <input type="text" name="full_name" class="form-input" required>
+            </div>
+            <div class="grid grid-2">
+                <div class="form-group">
+                    <label class="form-label">Cédula / ID</label>
+                    <input type="text" name="national_id" class="form-input" placeholder="000-0000000-00">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Teléfono</label>
+                    <input type="text" name="phone" class="form-input" placeholder="+1 555-000-0000">
+                </div>
+            </div>
+            <div class="grid grid-2">
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="email" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Sexo</label>
+                    <select name="sex" class="form-select">
+                        <option value="">Seleccionar...</option>
+                        <option value="Male">Masculino</option>
+                        <option value="Female">Femenino</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Fecha de Nacimiento</label>
+                <input type="date" name="date_of_birth" class="form-input">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Dirección</label>
+                <textarea name="address" class="form-textarea"></textarea>
+            </div>
+            <div class="flex gap-2">
+                <button type="submit" class="btn btn-primary btn-block">Guardar Paciente</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function editPatient(id, name, nationalId, phone, email) {
+    // Simple edit via modal - navigate to edit page or implement inline
+    window.location = '/admin/patients/view/' + id;
+}
+</script>
+
+<%- include('footer.html') %>
