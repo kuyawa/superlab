@@ -647,10 +647,10 @@ tbody tr:last-child td {
 /* Navbar Menu */
 .navbar-menu {
     display: flex;
+    justify-content: flex-end;
     align-items: center;
     gap: 1.5rem;
     flex: 1;
-    justify-content: space-between;
 }
 
 .navbar-links {
