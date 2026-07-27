@@ -7,7 +7,10 @@ const { Pool } = require('pg');
 
 class Database {
     constructor() {
-        this.pool = new Pool({ connectionString: process.env.DATABASE });
+        this.pool = new Pool({
+            connectionString: process.env.DATABASE_URL
+            //ssl: { rejectUnauthorized: false }
+        });
     }
 
     // ============================================================
