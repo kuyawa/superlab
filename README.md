@@ -1,6 +1,10 @@
-# SuperLab - Sistema de Gestión para Laboratorios Clínicos
+# SuperLab
+
+## Sistema de Gestión para Laboratorios Clínicos
 
 **SuperLab** es una aplicación web moderna y profesional diseñada para la gestión integral de laboratorios clínicos. Permite administrar pacientes, órdenes de pruebas, resultados, reportes y más, todo en un solo lugar con interfaz en español.
+
+![webshot](webshot.jpg)
 
 ---
 
@@ -367,14 +371,6 @@ El archivo `tests-es.txt` contiene más de 250 pruebas de laboratorio en españo
 ## Licencia
 
 Este proyecto es de código abierto. Todos los derechos reservados por SuperLab
-
----
-
-## Contacto
-
-- **Email**: info@superlab.com
-- **Web**: https://superlab.com
-- **GitHub**: https://github.com/superlab
 
 ---
 
