@@ -1,5 +1,14 @@
 <%- include('header.html', { title: 'Panel de Control', extraStyles: ['dashboard.css'] }) %>
-
+<%
+function showTestStatus(status){
+    const statusMap = { 'draft': 'Borrador', 'collected': 'Muestras', 'analysis': 'Análisis', 'results': 'Resultados', 'verified': 'Verificado', 'published': 'Publicado' };
+    return statusMap[status] || 'N/D'
+}
+function showPayStatus(status){
+    const statusMap = { 'draft': 'Borrador', 'collected': 'Muestras', 'analysis': 'Análisis', 'results': 'Resultados', 'verified': 'Verificado', 'published': 'Publicado' };
+    return statusMap[status] || 'N/D'
+}
+%>
 <div class="dashboard-page">
     <div class="container">
         <div class="dashboard-header">
@@ -10,22 +19,22 @@
         <!-- Stats -->
         <div class="stats-grid">
             <div class="stat-card">
-                <span class="stat-card-icon">📋</span>
+                <!-- <span class="stat-card-icon">📋</span> -->
                 <div class="stat-card-value"><%= stats.totalOrders || 0 %></div>
-                <div class="stat-card-label">Órdenes Totales</div>
+                <div class="stat-card-label">Ordenes Totales</div>
             </div>
             <div class="stat-card">
-                <span class="stat-card-icon">⏳</span>
+                <!-- <span class="stat-card-icon">⏳</span> -->
                 <div class="stat-card-value"><%= stats.pendingOrders || 0 %></div>
                 <div class="stat-card-label">Pendientes</div>
             </div>
             <div class="stat-card">
-                <span class="stat-card-icon">🧪</span>
+                <!-- <span class="stat-card-icon">🧪</span> -->
                 <div class="stat-card-value"><%= stats.completedTests || 0 %></div>
                 <div class="stat-card-label">Pruebas Completadas</div>
             </div>
             <div class="stat-card">
-                <span class="stat-icon">👥</span>
+                <!-- <span class="stat-icon">👥</span> -->
                 <div class="stat-card-value"><%= stats.totalPatients || 0 %></div>
                 <div class="stat-card-label">Pacientes</div>
             </div>
@@ -36,7 +45,7 @@
             <!-- Recent Orders -->
             <div class="dashboard-card">
                 <div class="dashboard-card-header">
-                    <h3>Órdenes Recientes</h3>
+                    <h3>Ordenes Recientes</h3>
                     <a href="/orders" class="btn btn-sm btn-outline">Ver todas</a>
                 </div>
                 <div class="dashboard-card-body">
@@ -45,32 +54,33 @@
                             <table>
                                 <thead>
                                     <tr>
-                                        <th>#</th>
-                                        <th>Paciente</th>
-                                        <th>Estado</th>
-                                        <th>Total</th>
-                                        <th>Pago</th>
+                                        <th>Examen</th>
                                         <th>Fecha</th>
+                                        <th>Cédula</th>
+                                        <th>Paciente</th>
+                                        <th>Total</th>
+                                        <th>Estado</th>
+                                        <th>Pago</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <% recentOrders.forEach(function(order) { %>
                                         <tr>
-                                            <td><a href="/orders/view/<%= order.id %>">#<%= order.id %></a></td>
+                                            <td><a href="/orders/view/<%= order.id %>"><%= order.id.toString().padStart(6,'0') %></a></td>
+                                            <td class="text-sm"><%= new Date(order.created_at).toLocaleDateString('es-ES') %></td>
+                                            <td><%= order.national_id %></td>
                                             <td><%= order.patient_name %></td>
+                                            <td>$<%= parseFloat(order.total_amount).toFixed(2) %></td>
                                             <td>
-                                                <% var statusMap = { 'draft': 'Borrador', 'specimen_collected': 'Muestra tomada', 'in_analysis': 'En análisis', 'results_entered': 'Resultados ingresados', 'verified': 'Verificado', 'published': 'Publicado' }; %>
                                                 <span class="badge badge-<%= order.status === 'published' ? 'success' : order.status === 'draft' ? 'warning' : 'info' %>">
-                                                    <%= statusMap[order.status] || order.status %>
+                                                    <%= showTestStatus(order.status) || order.status %>
                                                 </span>
                                             </td>
-                                            <td>$<%= parseFloat(order.total_amount).toFixed(2) %></td>
                                             <td>
                                                 <span class="badge badge-<%= order.paid ? 'success' : 'danger' %>">
                                                     <%= order.paid ? 'Pagado' : 'Pendiente' %>
                                                 </span>
                                             </td>
-                                            <td class="text-sm"><%= new Date(order.created_at).toLocaleDateString('es-ES') %></td>
                                         </tr>
                                     <% }); %>
                                 </tbody>
@@ -95,7 +105,7 @@
                         <% recentActivity.forEach(function(activity) { %>
                             <div class="activity-item">
                                 <div class="activity-icon <%= activity.action %>">
-                                    <%= activity.action === 'login' ? '🔑' : activity.action === 'create_order' ? '📋' : activity.action === 'enter_results' ? '✏️' : '📤' %>
+                                    <!-- <%= activity.action === 'login' ? '🔑' : activity.action === 'create_order' ? '📋' : activity.action === 'enter_results' ? '✏️' : '📤' %> -->
                                 </div>
                                 <div class="activity-content">
                                     <p><%= activity.description %></p>

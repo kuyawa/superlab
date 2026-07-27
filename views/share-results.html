@@ -4,13 +4,13 @@
     <div class="container">
         <div class="results-card" style="max-width: 600px; margin: 0 auto;">
             <div class="results-header">
-                <span style="font-size: 3rem; display: block; margin-bottom: 1rem;">📤</span>
+                <!-- <span style="font-size: 3rem; display: block; margin-bottom: 1rem;">📤</span> -->
                 <h1>Compartir Resultados</h1>
-                <p class="text-muted">Orden #<%= order.id %> — <%= order.patient_name %></p>
+                <p class="text-muted">Orden #<%= order.id.toString().padStart(6,'0') %> — <%= order.patient_name %></p>
             </div>
 
-            <div class="order-form-section" style="border: 2px solid var(--accent-primary);">
-                <h3>🔗 Enlace de Acceso</h3>
+            <div class="order-form-section">
+                <h3>Enlace de Acceso</h3>
                 <div class="form-group">
                     <label class="form-label">URL para el paciente</label>
                     <div class="flex gap-1">
@@ -30,31 +30,31 @@
             </div>
 
             <div class="order-form-section">
-                <h3>📱 Enviar al Paciente</h3>
-                <p class="text-sm text-muted mb-2">Copia el siguiente mensaje para enviarlo al paciente:</p>
+                <h3>Enviar al Paciente</h3>
+                <p class="text-sm text-muted mb-2">Copia el siguiente mensaje para enviarlo al paciente • <button class="btn btn-link" onclick="copyMessage()">Copiar Mensaje</button></p>
                 <div class="form-group">
-                    <textarea class="form-textarea" rows="4" readonly id="messageText">
-Tus resultados de laboratorio están disponibles.
+                    <textarea class="form-textarea" rows="6" readonly id="messageText">
+SuperLab
+Tus resultados de laboratorio están disponibles
 
 Ingresa a: <%= shareUrl %>
-Usa este token: <%= shareToken %}
-
-SuperLab - Resultados Seguros</textarea>
-                    <button class="btn btn-secondary btn-sm mt-1" onclick="copyMessage()">Copiar Mensaje</button>
+Usa este token <%= shareToken %> e imprime los resultados
+El token vence en 7 días</textarea>
+                    
                 </div>
                 
-                <div class="flex gap-2 mt-2">
-                    <button class="btn btn-primary" onclick="alert('📧 Función de email será implementada próximamente')">
-                        📧 Enviar por Email
+                <div class="share-results">
+                    <button class="btn btn-primary" onclick="alert('Función de email será implementada próximamente')">
+                        Enviar por Email
                     </button>
-                    <button class="btn btn-success" onclick="alert('📱 Función de WhatsApp será implementada próximamente')">
-                        📱 Enviar por WhatsApp
+                    <button class="btn btn-success" onclick="alert('Función de WhatsApp será implementada próximamente')">
+                        Enviar por WhatsApp
                     </button>
                 </div>
             </div>
 
             <div class="text-center mt-3">
-                <a href="/orders/view/<%= order.id %>" class="btn btn-secondary">← Volver a la Orden</a>
+                <a href="/orders/view/<%= order.id %>" class="">← Volver a la Orden</a>
             </div>
         </div>
     </div>
@@ -66,6 +66,8 @@ function copyUrl() {
     input.select();
     document.execCommand('copy');
     alert('URL copiada al portapapeles');
+    input.setSelectionRange(input.value.length, input.value.length);
+    input.blur();
 }
 
 function copyToken() {
@@ -73,6 +75,8 @@ function copyToken() {
     input.select();
     document.execCommand('copy');
     alert('Token copiado al portapapeles');
+    input.setSelectionRange(input.value.length, input.value.length);
+    input.blur();
 }
 
 function copyMessage() {
@@ -80,6 +84,8 @@ function copyMessage() {
     textarea.select();
     document.execCommand('copy');
     alert('Mensaje copiado al portapapeles');
+    textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+    textarea.blur();
 }
 </script>
 

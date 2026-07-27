@@ -11,6 +11,11 @@
 
 .auth-container {
     width: 100%;
+    max-width: 720px;
+}
+
+.auth-login {
+    width: 100%;
     max-width: 480px;
 }
 

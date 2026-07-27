@@ -10,13 +10,13 @@
         </div>
 
         <% if (typeof error !== 'undefined' && error) { %>
-            <div class="alert alert-danger">⚠️ <%= error %></div>
+            <div class="alert alert-danger"><%= error %></div>
         <% } %>
 
         <form action="/orders/new" method="POST" class="order-form">
             <!-- Patient Section -->
             <div class="order-form-section">
-                <h3>👤 Datos del Paciente</h3>
+                <h3>Datos del Paciente</h3>
                 <div class="grid grid-2">
                     <div class="form-group">
                         <label class="form-label">Paciente</label>
@@ -41,7 +41,7 @@
 
             <!-- Tests Section -->
             <div class="order-form-section">
-                <h3>🧪 Pruebas a Realizar</h3>
+                <h3>Pruebas a Realizar</h3>
                 <p class="text-sm text-muted mb-2">Selecciona una o más pruebas para esta orden</p>
                 
                 <% if (typeof tests !== 'undefined' && tests.length > 0) { %>
@@ -73,7 +73,7 @@
 
             <!-- Payment -->
             <div class="order-form-section">
-                <h3>💳 Pago</h3>
+                <h3>Pago</h3>
                 <div class="flex items-center gap-3">
                     <label class="form-check">
                         <input type="checkbox" name="paid" value="true">
@@ -87,7 +87,7 @@
 
             <!-- Notes -->
             <div class="order-form-section">
-                <h3>📝 Notas</h3>
+                <h3>Notas</h3>
                 <div class="form-group">
                     <textarea name="notes" class="form-textarea" placeholder="Notas adicionales para esta orden..."></textarea>
                 </div>

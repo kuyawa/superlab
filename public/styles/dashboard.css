@@ -59,7 +59,8 @@
 
 .dashboard-grid {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+/*    grid-template-columns: 2fr 1fr;*/
+    grid-template-columns: 1fr;
     gap: 1.5rem;
 }
 
@@ -93,7 +94,8 @@
 
 .activity-item {
     display: flex;
-    align-items: flex-start;
+    justify-content: flex-start;
+    align-items: center;
     gap: 1rem;
     padding: 0.75rem 0;
     border-bottom: 1px solid var(--border-light);
@@ -104,8 +106,8 @@
 }
 
 .activity-icon {
-    width: 36px;
-    height: 36px;
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -114,9 +116,9 @@
     flex-shrink: 0;
 }
 
-.activity-icon.login { background: var(--success-light); }
-.activity-icon.create { background: var(--accent-light); }
-.activity-icon.enter { background: var(--warning-light); }
+.activity-icon.login   { background: var(--text-muted); }
+.activity-icon.create  { background: var(--success); }
+.activity-icon.results { background: var(--accent-primary); }
 .activity-icon.publish { background: var(--info); }
 
 .activity-content {

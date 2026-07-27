@@ -4,21 +4,20 @@
     <div class="auth-container">
         <div class="auth-card">
             <div class="auth-header">
-                <span class="auth-icon">🚀</span>
                 <h1>Crear Cuenta</h1>
                 <p>Registra tu laboratorio en SuperLab y comienza a gestionar</p>
             </div>
 
             <% if (typeof error !== 'undefined' && error) { %>
                 <div class="alert alert-danger auth-alert">
-                    <span>⚠️</span>
+                    <!-- <span>⚠️</span> -->
                     <span><%= error %></span>
                 </div>
             <% } %>
 
             <% if (typeof success !== 'undefined' && success) { %>
                 <div class="alert alert-success auth-alert">
-                    <span>✅</span>
+                    <!-- <span>✅</span> -->
                     <span><%= success %></span>
                 </div>
             <% } %>
@@ -44,14 +43,12 @@
 
                 <div class="form-group">
                     <label class="form-label" for="phone">Teléfono</label>
-                    <input type="tel" id="phone" name="phone" class="form-input" 
-                           placeholder="+1 555-000-0000">
+                    <input type="tel" id="phone" name="phone" class="form-input" placeholder="414-000-0000">
                 </div>
 
                 <div class="form-group">
                     <label class="form-label" for="national_id">Cédula / Identificación</label>
-                    <input type="text" id="national_id" name="national_id" class="form-input" 
-                           placeholder="000-0000000-00">
+                    <input type="text" id="national_id" name="national_id" class="form-input" placeholder="00000000">
                 </div>
 
                 <div class="form-group">
@@ -60,7 +57,7 @@
                         <input type="password" id="password" name="password" class="form-input" 
                                placeholder="Mínimo 8 caracteres" required minlength="8">
                         <button type="button" class="password-toggle" onclick="togglePassword('password')" aria-label="Mostrar contraseña">
-                            👁️
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" width="18px" height="18px"><path fill="currentColor" d="M288 80C222.8 80 169.2 109.6 128.1 147.7 89.6 183.5 63 226 49.4 256 63 286 89.6 328.5 128.1 364.3 169.2 402.4 222.8 432 288 432s118.8-29.6 159.9-67.7C486.4 328.5 513 286 526.6 256 513 226 486.4 183.5 447.9 147.7 406.8 109.6 353.2 80 288 80zM95.4 112.6C142.5 68.8 207.2 32 288 32s145.5 36.8 192.6 80.6c46.8 43.5 78.1 95.4 93 131.1 3.3 7.9 3.3 16.7 0 24.6-14.9 35.7-46.2 87.7-93 131.1-47.1 43.7-111.8 80.6-192.6 80.6S142.5 443.2 95.4 399.4c-46.8-43.5-78.1-95.4-93-131.1-3.3-7.9-3.3-16.7 0-24.6 14.9-35.7 46.2-87.7 93-131.1zM288 336c44.2 0 80-35.8 80-80 0-29.6-16.1-55.5-40-69.3-1.4 59.7-49.6 107.9-109.3 109.3 13.8 23.9 39.7 40 69.3 40zm-79.6-88.4c2.5 .3 5 .4 7.6 .4 35.3 0 64-28.7 64-64 0-2.6-.2-5.1-.4-7.6-37.4 3.9-67.2 33.7-71.1 71.1zm45.6-115c10.8-3 22.2-4.5 33.9-4.5 8.8 0 17.5 .9 25.8 2.6 .3 .1 .5 .1 .8 .2 57.9 12.2 101.4 63.7 101.4 125.2 0 70.7-57.3 128-128 128-61.6 0-113-43.5-125.2-101.4-1.8-8.6-2.8-17.5-2.8-26.6 0-11 1.4-21.8 4-32 .2-.7 .3-1.3 .5-1.9 11.9-43.4 46.1-77.6 89.5-89.5z"/></svg>
                         </button>
                     </div>
                     <span class="form-hint">La contraseña debe tener al menos 8 caracteres</span>
@@ -69,10 +66,9 @@
                 <div class="form-group">
                     <label class="form-label" for="confirm_password">Confirmar Contraseña</label>
                     <div class="password-input-wrapper">
-                        <input type="password" id="confirm_password" name="confirm_password" class="form-input" 
-                               placeholder="Repite la contraseña" required>
+                        <input type="password" id="confirm_password" name="confirm_password" class="form-input" placeholder="Repite la contraseña" required>
                         <button type="button" class="password-toggle" onclick="togglePassword('confirm_password')" aria-label="Mostrar contraseña">
-                            👁️
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" width="18px" height="18px"><path fill="currentColor" d="M288 80C222.8 80 169.2 109.6 128.1 147.7 89.6 183.5 63 226 49.4 256 63 286 89.6 328.5 128.1 364.3 169.2 402.4 222.8 432 288 432s118.8-29.6 159.9-67.7C486.4 328.5 513 286 526.6 256 513 226 486.4 183.5 447.9 147.7 406.8 109.6 353.2 80 288 80zM95.4 112.6C142.5 68.8 207.2 32 288 32s145.5 36.8 192.6 80.6c46.8 43.5 78.1 95.4 93 131.1 3.3 7.9 3.3 16.7 0 24.6-14.9 35.7-46.2 87.7-93 131.1-47.1 43.7-111.8 80.6-192.6 80.6S142.5 443.2 95.4 399.4c-46.8-43.5-78.1-95.4-93-131.1-3.3-7.9-3.3-16.7 0-24.6 14.9-35.7 46.2-87.7 93-131.1zM288 336c44.2 0 80-35.8 80-80 0-29.6-16.1-55.5-40-69.3-1.4 59.7-49.6 107.9-109.3 109.3 13.8 23.9 39.7 40 69.3 40zm-79.6-88.4c2.5 .3 5 .4 7.6 .4 35.3 0 64-28.7 64-64 0-2.6-.2-5.1-.4-7.6-37.4 3.9-67.2 33.7-71.1 71.1zm45.6-115c10.8-3 22.2-4.5 33.9-4.5 8.8 0 17.5 .9 25.8 2.6 .3 .1 .5 .1 .8 .2 57.9 12.2 101.4 63.7 101.4 125.2 0 70.7-57.3 128-128 128-61.6 0-113-43.5-125.2-101.4-1.8-8.6-2.8-17.5-2.8-26.6 0-11 1.4-21.8 4-32 .2-.7 .3-1.3 .5-1.9 11.9-43.4 46.1-77.6 89.5-89.5z"/></svg>
                         </button>
                     </div>
                 </div>
@@ -82,15 +78,15 @@
                     <div class="flex gap-2" style="flex-wrap: wrap;">
                         <label class="form-check" style="padding: 0.75rem 1rem; border: 2px solid var(--border-color); border-radius: var(--radius-md); cursor: pointer; flex: 1;">
                             <input type="radio" name="plan" value="FREE" checked>
-                            <span><strong>Gratis</strong> - 0$/mes</span>
+                            <span><strong>Gratis</strong> - $0 al mes</span>
                         </label>
                         <label class="form-check" style="padding: 0.75rem 1rem; border: 2px solid var(--border-color); border-radius: var(--radius-md); cursor: pointer; flex: 1;">
                             <input type="radio" name="plan" value="BASIC">
-                            <span><strong>Básico</strong> - $10/mes</span>
+                            <span><strong>Básico</strong> - $9 al mes</span>
                         </label>
                         <label class="form-check" style="padding: 0.75rem 1rem; border: 2px solid var(--border-color); border-radius: var(--radius-md); cursor: pointer; flex: 1;">
                             <input type="radio" name="plan" value="PRO">
-                            <span><strong>Pro</strong> - $25/mes</span>
+                            <span><strong>Pro</strong> - $19 al mes</span>
                         </label>
                     </div>
                 </div>

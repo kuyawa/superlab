@@ -90,6 +90,18 @@
     letter-spacing: 0.25em;
 }
 
+.share-copy {
+/*    btn btn-secondary btn-sm mt-1*/
+    margin-top: 1rem;
+}
+
+.share-results {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+}
+
 @media (max-width: 480px) {
     .results-card {
         padding: 1.5rem;

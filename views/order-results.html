@@ -11,7 +11,7 @@
 
         <form action="/orders/enter-results/<%= order.id %>" method="POST">
             <div class="order-form-section">
-                <h3>🧪 Resultados de Pruebas</h3>
+                <h3>Resultados de Pruebas</h3>
                 <% if (typeof orderTests !== 'undefined' && orderTests.length > 0) { %>
                     <% orderTests.forEach(function(ot) { %>
                         <div class="test-item" style="margin-bottom: 1rem; <%= ot.flag === 'high' ? 'border-left: 4px solid var(--danger);' : ot.flag === 'low' ? 'border-left: 4px solid var(--info);' : '' %>">

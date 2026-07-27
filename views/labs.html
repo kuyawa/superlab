@@ -11,7 +11,7 @@
             <% if (typeof labs !== 'undefined' && labs.length > 0) { %>
                 <% labs.forEach(function(lab) { %>
                     <div class="lab-card" onclick="window.location='/labs/view/<%= lab.id %>'">
-                        <span class="lab-icon">🔬</span>
+                        <!-- <span class="lab-icon">🔬</span> -->
                         <h3><%= lab.name %></h3>
                         <p><%= lab.address || 'Dirección no especificada' %></p>
                         <p class="text-sm"><%= lab.phone || '' %></p>

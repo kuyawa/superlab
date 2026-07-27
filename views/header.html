@@ -31,32 +31,32 @@
 
                 <div class="navbar-menu" id="navbarMenu">
                     <ul class="navbar-links">
-                        <li><a href="/">Inicio</a></li>
-                        <li><a href="/labs">Laboratorios</a></li>
-                        <li><a href="/planes">Planes</a></li>
+                        <!-- <li><a href="/">Inicio</a></li> -->
+                        <!-- <li><a href="/planes">Planes</a></li> -->
                         <% if (typeof user !== 'undefined' && user) { %>
-                            <li><a href="/dashboard">Panel</a></li>
+                            <li><a href="/dashboard">Admin</a></li>
                             <% if (user.role === 'admin') { %>
+                                <li><a href="/orders">Ordenes</a></li>
                                 <li><a href="/admin/tests">Pruebas</a></li>
                                 <li><a href="/admin/patients">Pacientes</a></li>
                             <% } %>
-                            <li><a href="/orders">Órdenes</a></li>
                         <% } %>
+                        <li><a href="/labs">Laboratorios</a></li>
                     </ul>
                     <div class="navbar-actions">
-                        <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">
-                            <span id="themeIcon"><%= typeof theme !== 'undefined' && theme === 'dark' ? '☀️' : '🌙' %></span>
-                        </button>
                         <% if (typeof user !== 'undefined' && user) { %>
                             <div class="user-menu">
                                 <span class="user-greeting hide-mobile"><%= user.name %></span>
-                                <span class="badge badge-info"><%= user.role === 'admin' ? 'Admin' : 'Asist.' %></span>
+                                <!-- <span class="badge badge-info"><%= user.role === 'admin' ? 'Admin' : 'Asist.' %></span> -->
                                 <a href="/logout" class="btn btn-sm btn-outline">Salir</a>
                             </div>
                         <% } else { %>
                             <a href="/login" class="btn btn-sm btn-primary">Ingresar</a>
                             <a href="/register" class="btn btn-sm btn-outline">Registro</a>
                         <% } %>
+                        <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">
+                            <span id="themeIcon"><%= typeof theme !== 'undefined' && theme === 'dark' ? '☀️' : '🌙' %></span>
+                        </button>
                     </div>
                 </div>
             </nav>

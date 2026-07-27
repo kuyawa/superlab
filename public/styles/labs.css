@@ -105,6 +105,10 @@
     color: var(--accent-primary);
 }
 
+.panel-tests {
+    margin-left: 2rem;
+}
+
 @media (max-width: 768px) {
     .labs-grid {
         grid-template-columns: 1fr;

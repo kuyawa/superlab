@@ -1,7 +1,10 @@
 require('./envvars');
 const path = require('node:path');
+const crypto = require('node:crypto');
 const express = require('express');
 const ejs = require('ejs');
+//const fileUpload = require('express-fileupload');
+//const expressLayouts = require('express-ejs-layouts'); research layouts
 const cookieParser = require('cookie-parser');
 const Agent = require('./agent');
 const Database = require('./database');
@@ -109,12 +112,12 @@ app.get('/', async (req, res) => {
 // Plans Page
 app.get('/planes', async (req, res) => {
     try {
-        const plans = await db.getAllPlans();
+        //const plans = await db.getAllPlans();
         res.render('index', {
             title: 'Planes y Precios',
             extraStyles: ['index.css'],
             extraScripts: [],
-            plans
+            //plans
         });
     } catch (err) {
         console.error('Error loading plans:', err);
@@ -141,12 +144,14 @@ app.get('/labs', async (req, res) => {
 // Lab Detail with Tests (Public)
 app.get('/labs/view/:id', async (req, res) => {
     try {
-        const lab = await db.getLabById(req.params.id);
+        const labId = req.params.id
+        const lab = await db.getLabById(labId);
         if (!lab) {
             return res.status(404).send('Laboratorio no encontrado');
         }
-        const tests = await db.getAllTests(req.params.id);
-        const panels = await db.getAllPanels(req.params.id);
+        const tests = await db.getAllTests(labId);
+        const panels = await db.getAllPanels(labId, true);
+        //const panels = await db.getAllPanels(labId);
         res.render('lab-view', {
             title: lab.name,
             extraStyles: ['labs.css'],
@@ -719,7 +724,7 @@ app.post('/results/:patientId', async (req, res) => {
         }
 
         // Mark token as used
-        await db.markTokenUsed(validToken.id);
+        // await db.markTokenUsed(validToken.id);
 
         // Get patient info and results
         const patient = await db.getPatientById(patientId);
@@ -1006,9 +1011,8 @@ app.get('/orders/:id/share', requireAuth(), async (req, res) => {
         const shareUrl = `${req.protocol}://${req.get('host')}/results/${order.patient_id}`;
         
         // In production, generate and store a new token for sharing
-        const shareToken = generateToken().substring(0, 8);
-        await db.createPatientToken(order.patient_id, order.id, shareToken, 
-            new Date(Date.now() + 7 * 24 * 60 * 60 * 1000));
+        const shareToken = BigInt('0x'+generateToken()).toString().substring(0, 9);
+        await db.createPatientToken(order.patient_id, order.id, shareToken, new Date(Date.now() + 7 * 24 * 60 * 60 * 1000));
 
         res.render('share-results', {
             title: 'Compartir Resultados',

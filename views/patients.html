@@ -7,14 +7,16 @@
                 <h1>Pacientes</h1>
                 <p class="text-muted">Gestión de pacientes registrados en el laboratorio</p>
             </div>
-            <button class="btn btn-primary" onclick="openModal('newPatientModal')">+ Nuevo Paciente</button>
         </div>
 
         <!-- Search -->
-        <form action="/admin/patients" method="GET" class="search-form mb-3">
-            <input type="text" name="search" class="form-input" placeholder="Buscar por nombre, cédula o teléfono..." value="<%= search || '' %>">
-            <button type="submit" class="btn btn-primary">🔍 Buscar</button>
-        </form>
+        <div class="search-area">
+            <form action="/admin/patients" method="GET" class="search-form">
+                <input type="text" name="search" class="form-input" placeholder="Buscar por nombre, cédula o teléfono..." value="<%= search || '' %>">
+                <button type="submit" class="btn btn-primary">Buscar</button>
+            </form>
+            <button type="button" class="btn btn-outline" onclick="openModal('newPatientModal')">Nuevo Paciente</button>
+        </div>
 
         <!-- Patients Table -->
         <div class="dashboard-card">
@@ -29,7 +31,7 @@
                                     <th>Teléfono</th>
                                     <th>Email</th>
                                     <th>Sexo</th>
-                                    <th>Órdenes</th>
+                                    <th>Ordenes</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>

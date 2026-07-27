@@ -9,22 +9,22 @@
 
         <div class="stats-grid">
             <div class="stat-card">
-                <span class="stat-card-icon">📋</span>
+                <!-- <span class="stat-card-icon">📋</span> -->
                 <div class="stat-card-value"><%= stats.totalOrders || 0 %></div>
-                <div class="stat-card-label">Órdenes Totales</div>
+                <div class="stat-card-label">Ordenes Totales</div>
             </div>
             <div class="stat-card">
-                <span class="stat-card-icon">⏳</span>
+                <!-- <span class="stat-card-icon">⏳</span> -->
                 <div class="stat-card-value"><%= stats.pendingOrders || 0 %></div>
-                <div class="stat-card-label">Órdenes Pendientes</div>
+                <div class="stat-card-label">Ordenes Pendientes</div>
             </div>
             <div class="stat-card">
-                <span class="stat-card-icon">✅</span>
+                <!-- <span class="stat-card-icon">✅</span> -->
                 <div class="stat-card-value"><%= stats.publishedResults || 0 %></div>
                 <div class="stat-card-label">Resultados Publicados</div>
             </div>
             <div class="stat-card">
-                <span class="stat-card-icon">💰</span>
+                <!-- <span class="stat-card-icon">💰</span> -->
                 <div class="stat-card-value"><%= stats.unpaidOrders || 0 %></div>
                 <div class="stat-card-label">Pagos Pendientes</div>
             </div>
@@ -34,7 +34,7 @@
             <!-- Daily Orders Chart (simplified) -->
             <div class="dashboard-card">
                 <div class="dashboard-card-header">
-                    <h3>Órdenes por Día (Últimos 7 días)</h3>
+                    <h3>Ordenes por Día (Últimos 7 días)</h3>
                 </div>
                 <div class="dashboard-card-body">
                     <% if (typeof dailyOrders !== 'undefined' && dailyOrders.length > 0) { %>

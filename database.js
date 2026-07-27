@@ -268,14 +268,21 @@ class Database {
     // PANEL METHODS
     // ============================================================
 
-    async getAllPanels(labId) {
-        const result = await this.pool.query(
+    async getAllPanels(labId, includeTests=false) {
+        const panels = await this.pool.query(
             `SELECT p.*, 
              (SELECT COUNT(*) FROM panel_tests pt WHERE pt.panel_id = p.id) as test_count
              FROM panels p WHERE p.lab_id = $1 AND p.is_active = true ORDER BY p.name_es`,
             [labId]
         );
-        return result.rows;
+        if(includeTests && panels.rows?.length > 0){
+            for(let row of panels.rows){
+                row.tests = await this.getPanelTests(row.id)
+                //console.log('INCLUDED', row.tests)
+            }
+            //console.log('PANELS', panels.rows)
+        }
+        return panels.rows;
     }
 
     async getPanelById(id) {
@@ -283,9 +290,20 @@ class Database {
         return result.rows[0] || null;
     }
 
-    async getPanelTests(panelId) {
+/*
+    async getAllPanelTests(labId) {
         const result = await this.pool.query(
             `SELECT t.* FROM tests t 
+             INNER JOIN panel_tests p ON t.id = p.test_id 
+             WHERE p.lab_id = $1`,
+            [labId]
+        );
+        return result.rows;
+    }
+*/
+    async getPanelTests(panelId) {
+        const result = await this.pool.query(
+            `SELECT t.*, pt.panel_id FROM tests t
              INNER JOIN panel_tests pt ON t.id = pt.test_id 
              WHERE pt.panel_id = $1`,
             [panelId]
@@ -299,7 +317,7 @@ class Database {
 
     async getAllOrders(labId, statusFilter) {
         let query = `
-            SELECT o.*, p.full_name as patient_name, u.name as created_by,
+            SELECT o.*, p.national_id, p.full_name as patient_name, u.name as created_by,
             (SELECT COUNT(*) FROM order_tests ot WHERE ot.order_id = o.id) as test_count
             FROM orders o 
             LEFT JOIN patients p ON o.patient_id = p.id 
@@ -319,7 +337,7 @@ class Database {
 
     async getRecentOrders(labId, limit = 10) {
         const result = await this.pool.query(
-            `SELECT o.*, p.full_name as patient_name, u.name as created_by,
+            `SELECT o.*, p.national_id, p.full_name as patient_name, u.name as created_by,
              (SELECT COUNT(*) FROM order_tests ot WHERE ot.order_id = o.id) as test_count
              FROM orders o 
              LEFT JOIN patients p ON o.patient_id = p.id 

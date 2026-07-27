@@ -62,7 +62,7 @@
 
         <!-- Tests Results -->
         <div class="order-form-section">
-            <h3>🧪 Pruebas y Resultados</h3>
+            <h3>Pruebas y Resultados</h3>
             <% if (typeof orderTests !== 'undefined' && orderTests.length > 0) { %>
                 <div class="table-container" style="border: none; margin: 0 -1.5rem; border-radius: 0;">
                     <table>
@@ -134,9 +134,9 @@
                 </form>
             <% } %>
             <% if (order.status === 'published') { %>
-                <button onclick="window.print()" class="btn btn-secondary">🖨️ Imprimir Recibo</button>
-                <a href="/orders/<%= order.id %>/pdf" class="btn btn-secondary">📄 Descargar PDF</a>
-                <a href="/orders/<%= order.id %>/share" class="btn btn-primary">📤 Compartir Resultados</a>
+                <button onclick="window.print()" class="btn btn-secondary">Imprimir Recibo</button>
+                <a href="/orders/<%= order.id %>/pdf" class="btn btn-secondary">Descargar PDF</a>
+                <a href="/orders/<%= order.id %>/share" class="btn btn-primary">Compartir Resultados</a>
             <% } %>
         </div>
     </div>

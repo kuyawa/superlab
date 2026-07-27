@@ -1,10 +1,20 @@
-<%- include('header.html', { title: 'Órdenes', extraStyles: ['orders.css'] }) %>
+<%- include('header.html', { title: 'Ordenes', extraStyles: ['orders.css'] }) %>
+<%
+function showTestStatus(status){
+    const statusMap = { 'draft': 'Borrador', 'collected': 'Muestras', 'analysis': 'Análisis', 'results': 'Resultados', 'verified': 'Verificado', 'published': 'Publicado' };
+    return statusMap[status] || 'N/D'
+}
+function showPayStatus(status){
+    const statusMap = { 'draft': 'Borrador', 'collected': 'Muestras', 'analysis': 'Análisis', 'results': 'Resultados', 'verified': 'Verificado', 'published': 'Publicado' };
+    return statusMap[status] || 'N/D'
+}
+%>
 
 <div class="orders-page">
     <div class="container">
         <div class="orders-header">
             <div>
-                <h1>Órdenes de Laboratorio</h1>
+                <h1>Ordenes de Laboratorio</h1>
                 <p class="text-muted">Gestiona todas las órdenes de pruebas de laboratorio</p>
             </div>
             <a href="/orders/new" class="btn btn-primary">+ Nueva Orden</a>
@@ -14,9 +24,9 @@
         <div class="order-status-filter mb-3">
             <a href="/orders" class="btn btn-sm <%= !statusFilter ? 'btn-primary' : 'btn-secondary' %>">Todas</a>
             <a href="/orders?status=draft" class="btn btn-sm <%= statusFilter === 'draft' ? 'btn-primary' : 'btn-secondary' %>">Borrador</a>
-            <a href="/orders?status=specimen_collected" class="btn btn-sm <%= statusFilter === 'specimen_collected' ? 'btn-primary' : 'btn-secondary' %>">Muestra</a>
-            <a href="/orders?status=in_analysis" class="btn btn-sm <%= statusFilter === 'in_analysis' ? 'btn-primary' : 'btn-secondary' %>">En Análisis</a>
-            <a href="/orders?status=results_entered" class="btn btn-sm <%= statusFilter === 'results_entered' ? 'btn-primary' : 'btn-secondary' %>">Resultados</a>
+            <a href="/orders?status=collected" class="btn btn-sm <%= statusFilter === 'collected' ? 'btn-primary' : 'btn-secondary' %>">Muestra</a>
+            <a href="/orders?status=analysis" class="btn btn-sm <%= statusFilter === 'analysis' ? 'btn-primary' : 'btn-secondary' %>">Análisis</a>
+            <a href="/orders?status=results" class="btn btn-sm <%= statusFilter === 'results' ? 'btn-primary' : 'btn-secondary' %>">Resultados</a>
             <a href="/orders?status=published" class="btn btn-sm <%= statusFilter === 'published' ? 'btn-primary' : 'btn-secondary' %>">Publicados</a>
         </div>
 
@@ -24,44 +34,49 @@
         <div class="dashboard-card">
             <div class="dashboard-card-body" style="padding: 0;">
                 <% if (typeof orders !== 'undefined' && orders.length > 0) { %>
-                    <div class="table-container" style="border: none;">
+                    <div class="table-container">
                         <table>
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>Orden</th>
+                                    <th>Fecha</th>
+                                    <th>Cédula</th>
                                     <th>Paciente</th>
-                                    <th>Estado</th>
                                     <th>Pruebas</th>
                                     <th>Total</th>
+                                    <th>Estado</th>
                                     <th>Pago</th>
-                                    <th>Fecha</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <% orders.forEach(function(order) { %>
                                     <tr>
-                                        <td><strong>#<%= order.id %></strong></td>
+                                        <td><a href="/orders/view/<%= order.id %>"><%= order.id.toString().padStart(6,'0') %></a></td>
+                                        <td class="text-sm"><%= new Date(order.created_at).toLocaleDateString('es-ES') %></td>
+                                        <td><%= order.national_id %></td>
                                         <td><%= order.patient_name %></td>
-                                        <td>
-                                            <% var statusMap = { 'draft': 'Borrador', 'specimen_collected': 'Muestra', 'in_analysis': 'En análisis', 'results_entered': 'Resultados', 'verified': 'Verificado', 'published': 'Publicado' }; %>
-                                            <span class="badge badge-<%= order.status === 'published' ? 'success' : order.status === 'draft' ? 'warning' : 'info' %>">
-                                                <%= statusMap[order.status] || order.status %>
-                                            </span>
-                                        </td>
                                         <td><%= order.test_count || 0 %></td>
                                         <td>$<%= parseFloat(order.total_amount).toFixed(2) %></td>
+                                        <td>
+                                            <span class="badge badge-<%= order.status === 'published' ? 'success' : order.status === 'draft' ? 'warning' : 'info' %>">
+                                                <%= showTestStatus(order.status) || order.status %>
+                                            </span>
+                                        </td>
                                         <td>
                                             <span class="badge badge-<%= order.paid ? 'success' : 'danger' %>">
                                                 <%= order.paid ? 'Pagado' : 'Pendiente' %>
                                             </span>
                                         </td>
-                                        <td class="text-sm"><%= new Date(order.created_at).toLocaleDateString('es-ES') %></td>
                                         <td>
                                             <div class="flex gap-1">
-                                                <a href="/orders/view/<%= order.id %>" class="btn btn-sm btn-primary">Ver</a>
                                                 <% if (order.status !== 'published') { %>
-                                                    <a href="/orders/edit/<%= order.id %>" class="btn btn-sm btn-secondary">Editar</a>
+                                                    <a href="/orders/edit/<%= order.id %>" class="btn btn-sm">
+                                                        <svg class="svg-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24px" height="24px">
+                                                          <path d="M19.607,18.746c0,0.881-0.716,1.624-1.597,1.624H5.231c-0.881,0-1.597-0.743-1.597-1.624V5.967  c0-0.881,0.716-1.571,1.597-1.571h7.454V3.332H5.231c-1.468,0-2.662,1.168-2.662,2.636v12.778c0,1.468,1.194,2.688,2.662,2.688  h12.778c1.468,0,2.662-1.221,2.662-2.688v-7.428h-1.065V18.746z"/>
+                                                          <path d="M20.807,3.17c-0.804-0.805-2.207-0.805-3.012,0l-7.143,7.143c-0.068,0.068-0.117,0.154-0.14,0.247L9.76,13.571  c-0.045,0.181,0.008,0.373,0.14,0.506c0.101,0.101,0.237,0.156,0.376,0.156c0.043,0,0.086-0.005,0.129-0.016l3.012-0.753  c0.094-0.023,0.179-0.072,0.247-0.14l7.143-7.143c0.402-0.402,0.624-0.937,0.624-1.506S21.21,3.572,20.807,3.17z M13.016,12.467  l-2.008,0.502l0.502-2.008l5.909-5.909l1.506,1.506L13.016,12.467z M20.054,5.428l-0.376,0.376l-1.506-1.506l0.376-0.376  c0.402-0.402,1.104-0.402,1.506,0c0.201,0.201,0.312,0.468,0.312,0.753C20.366,4.96,20.255,5.227,20.054,5.428z"/>
+                                                        </svg>
+                                                    </a>
                                                 <% } %>
                                             </div>
                                         </td>
