@@ -4,7 +4,7 @@
     <div class="container">
         <div class="orders-header">
             <div>
-                <h1>Nueva Orden de Pruebas</h1>
+                <h1>Nueva Orden de Exámenes</h1>
                 <p class="text-muted">Selecciona el paciente y las pruebas a realizar</p>
             </div>
         </div>
@@ -17,9 +17,9 @@
             <!-- Patient Section -->
             <div class="order-form-section">
                 <h3>Datos del Paciente</h3>
-                <div class="grid grid-2">
-                    <div class="form-group">
-                        <label class="form-label">Paciente</label>
+                <div>
+                    <div class="form-group" style="max-width:500px;">
+                        <!-- <label class="form-label">Registro</label> -->
                         <select name="patient_id" class="form-select" required>
                             <option value="">Seleccionar paciente...</option>
                             <% if (typeof patients !== 'undefined') { %>
@@ -31,9 +31,21 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">O crear nuevo paciente</label>
-                        <div class="flex gap-2">
-                            <input type="text" name="new_patient_name" class="form-input" placeholder="Nombre completo" style="flex:1;">
-                            <input type="text" name="new_patient_phone" class="form-input" placeholder="Teléfono" style="flex:1;">
+                        <div class="order-form-patient flex gap-2">
+                            <input type="text" name="new_patient_name" class="form-input" placeholder="Nombre completo">
+                            <input type="text" name="new_patient_phone" class="form-input" placeholder="Teléfono">
+                            <input type="text" name="new_patient_email" class="form-input" placeholder="Email">
+                            <select name="new_patient_sex" class="form-select" required>
+                                <option value="">Seleccionar sexo...</option>
+                                <option value="Masculino">Masculino</option>
+                                <option value="Femenino">Femenino</option>
+                            </select>
+                            <input type="date" name="new_patient_birthdate" class="form-input" placeholder="Nacimiento">
+                            <input type="text" name="new_patient_address" class="form-input" placeholder="Direccion">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="order-form-patient flex gap-2">
                         </div>
                     </div>
                 </div>

@@ -5,6 +5,7 @@
 /* CSS Variables */
 :root {
     /* Light Theme */
+    --scheme: light;
     --bg-primary: #ffffff;
     --bg-secondary: #f8f9fa;
     --bg-tertiary: #e9ecef;
@@ -41,6 +42,7 @@
 
 /* Dark Theme */
 [data-theme="dark"] {
+    --scheme: dark;
     --bg-primary: #0f172a;
     --bg-secondary: #1e293b;
     --bg-tertiary: #334155;
@@ -996,4 +998,9 @@ tbody tr:last-child td {
 
 .svg-icon {
     fill: var(--text-primary);
+}
+
+input[type="date"],
+input[type="time"] {
+  color-scheme: var(--scheme);
 }

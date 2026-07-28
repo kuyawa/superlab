@@ -8,7 +8,7 @@
     position: relative;
     overflow: hidden;
 /*    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--accent-light) 100%);*/
-    background: url(/media/hero.png) right no-repeat;
+/*    background: url(/media/hero6.png) right no-repeat;*/
 }
 
 .hero-content {
@@ -41,11 +41,14 @@
 }
 
 .hero-description {
-    font-size: 1.2rem;
-    color: var(--text-secondary);
     max-width: 600px;
     margin-bottom: 2rem;
+    padding: 1rem 0;
     line-height: 1.8;
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+/*    background-color: #00000066;*/
+    border-radius: 12px;
 }
 
 .hero-actions {
@@ -62,6 +65,10 @@
     position: relative;
 }
 
+.hero-visual img {
+    border-radius: 15px;
+}
+
 /*
 .hero-illustration {
     width: 100%;
@@ -75,6 +82,7 @@
     position: relative;
 }
 */
+
 .hero-stats {
     display: grid;
     grid-template-columns: repeat(3, 1fr);

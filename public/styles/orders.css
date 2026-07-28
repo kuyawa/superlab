@@ -47,6 +47,17 @@
     border-bottom: 1px solid var(--border-light);
 }
 
+.order-form-patient {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem 2rem;
+}
+
+.order-form-patient input,
+.order-form-patient select {
+    width: 100%;
+}
+
 .test-select-item {
     display: flex;
     align-items: center;
